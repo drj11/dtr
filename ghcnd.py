@@ -94,11 +94,11 @@ ghcnd_fields = dict(
     data=       (21, 269, str)
 ).items()
 
-def series(uid):
-    """Load GHCN-D data for station *uid*."""
+def series(uid, element='TMIN'):
+    """Load GHCN-D data for station *uid* element *element*."""
 
     f = open("%s.dly" % uid, 'U')
-    s = Series(uid=uid, element='TMIN')
+    s = Series(uid=uid, element=element)
     for line in f:
         row = {}
         for field, (p,q,convert) in ghcnd_fields:
