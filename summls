@@ -1,0 +1,8 @@
+#!/bin/sh
+for a in *.dly
+do
+    a=${a%.dly}
+    echo $a
+    ./summ.py $a TMIN
+    ./summ.py $a TMAX
+done

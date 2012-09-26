@@ -47,10 +47,15 @@ class Series:
             return
         if self.firstyear is None:
             self.firstyear = row['year']
-        # For simplicity, we assume that each incoming row can
-        # simply be appended.
+
+        # Pad out data if neccesary to cope with gaps.
         offset = 12*(row['year'] - self.firstyear) + row['month'] - 1
-        assert offset == len(self.data), "%(uid)s%(year)d%(month)02d gap" % row
+        assert offset >= len(self.data), "%(uid)s%(year)d%(month)02d time reversal" % row
+        while offset > len(self.data):
+            year = self.firstyear + len(self.data) // 12
+            month = len(self.data) % 12 + 1
+            pad = [self.MISSING for n in range(month_length(year, month))]
+            self.data.append(pad)
 
         nitems = month_length(row['year'], row['month'])
         m = []
@@ -79,7 +84,7 @@ def month_length(year, month):
                 return n
             except ValueError:
                 pass
-        assert 0, "%d%d month length" % (year, month)
+        assert 0, "%04d%02d month length" % (year, month)
     if month <= 7:
        return 30 + month%2
     else:
