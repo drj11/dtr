@@ -78,6 +78,7 @@ class Series:
 
 class Record:
     """Record multiple series for a given station."""
+    MISSING = -9999
     def __init__(self, **k):
         self.element = []
         self.series = {}
