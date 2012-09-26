@@ -5,6 +5,8 @@ See ftp://ftp.ncdc.noaa.goc/pub/data/ghcn/daily/readme.txt for
 details of the format (and location of the GHCN-D data).
 """
 
+import warnings
+
 class Series:
     """When populated, self.data will be a data series for a
     particular element (specified by self.element).
@@ -74,6 +76,28 @@ class Series:
             m.append(v)
         self.data.append(m)
 
+class Record:
+    """Record multiple series for a given station."""
+    def __init__(self, **k):
+        self.element = []
+        self.series = {}
+        self.firstyear = None
+        self.__dict__.update(k)
+        if 'element' in k:
+            del k['element']
+        for elem in self.element:
+            self.series[elem] = Series(element=elem, **k)
+
+    def append(self, row):
+        elem = row['element']
+        if elem not in self.element:
+            return
+        if self.firstyear is None:
+            self.firstyear = row['year']
+            for s in self.series.values():
+                s.firstyear = self.firstyear
+        self.series[elem].append(row)
+
 def month_length(year, month):
     """Return number of days in month."""
     if month == 2:
@@ -99,11 +123,12 @@ ghcnd_fields = dict(
     data=       (21, 269, str)
 ).items()
 
-def series(uid, element='TMIN'):
-    """Load GHCN-D data for station *uid* element *element*."""
+def series(uid, element=['TMIN']):
+    """Load GHCN-D data for station *uid* picking out all
+    elements in the list *element*."""
 
     f = open("%s.dly" % uid, 'U')
-    s = Series(uid=uid, element=element)
+    s = Record(uid=uid, element=element)
     for line in f:
         row = {}
         for field, (p,q,convert) in ghcnd_fields:

@@ -2,6 +2,5 @@
 for a in *.dly
 do
     a=${a%.dly}
-    ./summ.py $a TMIN
-    ./summ.py $a TMAX
+    ./summ.py $a
 done
