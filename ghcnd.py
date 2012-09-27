@@ -137,6 +137,26 @@ def series(uid, element=['TMIN']):
         s.append(row)
     return s
 
+def writeGHCNMV3(out, series):
+    """To the open file *out* write the series object in
+    GHCN-M V3 format."""
+
+    assert len(series.uid) == 11
+    # :todo: pick scale according to element.
+    scale = 100
+
+    for m in range(0, len(series.data), 12):
+        y = series.data[m:m+12]
+        if len(y) < 12:
+            y += [None]*(12-len(y))
+        y = [x*100 if x is not None else -9999 for x in y]
+        year = series.firstyear + m//12
+        out.write("%11s%04d%-4.4s" % (series.uid, year, series.element))
+        for x in y:
+            out.write("%5.0f   " % x)
+        out.write('\n')
+
+
 def main(argv=None):
     import sys
     if argv is None:

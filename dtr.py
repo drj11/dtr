@@ -74,8 +74,7 @@ def main(argv=None):
     arg = argv[1:]
 
     m = dtr_m(dtr(arg[0]))
-    print m
-    print m.data
+    ghcnd.writeGHCNMV3(sys.stdout, m)
 
 if __name__ == '__main__':
     main()
