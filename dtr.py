@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Computing DTR."""
+"""Computing DTR - Diurnal Temperature Range."""
 
 import itertools
 
@@ -9,12 +9,14 @@ import ghcnd
 
 def dtr(uid):
     """Convert a record (With TMIN and TMAX series) into a
-    sequence of DTR values, which each month yielded being a
+    series of DTR values, with each month being a sequence
     of daily DTR values.
     """
     rec = ghcnd.series(uid, element=['TMIN', 'TMAX'])
-    for mn,mx in zip(rec.series['TMIN'].data, rec.series['TMAX'].data):
-        yield single_dtr_month(rec, mn, mx)
+    new = ghcnd.Series(uid=uid, element='DTR', firstyear=rec.firstyear)
+    new.data = [list(single_dtr_month(rec, mn, mx))
+      for mn,mx in zip(rec.series['TMIN'].data, rec.series['TMAX'].data)]
+    return new
 
 def single_dtr_month(rec, mins, maxs):
     for dn,dx in zip(mins,maxs):
@@ -24,13 +26,20 @@ def single_dtr_month(rec, mins, maxs):
             yield None
 
 def dtr_m(daily):
-    """Convert result of dtr() to sequence of monthly averages."""
-    for imonth in daily:
-        month = list(imonth)
-        if qa_month(month):
-            yield dtr_average(month)
-        else:
-            yield None
+    """Convert result of dtr() to a monthly series."""
+
+    assert daily.element == 'DTR'
+    new = ghcnd.Series(uid=daily.uid, element='MDTR', firstyear=daily.firstyear)
+
+    new.data = map(single_dtr_average, daily.data)
+    return new
+
+def single_dtr_average(m):
+    month = list(m)
+    if qa_month(month):
+        return dtr_average(month)
+    else:
+        return None
 
 def qa_month(month):
     """Given a Month's worth of daily DTR data, retturn true if
@@ -56,7 +65,7 @@ def dtr_average(month):
 
     m = [x for x in month if x is not None]
     assert m
-    return sum(m)/len(m)
+    return float(sum(m))/len(m)
 
 def main(argv=None):
     import sys
@@ -64,7 +73,9 @@ def main(argv=None):
         argv = sys.argv
     arg = argv[1:]
 
-    print list(dtr_m(dtr(arg[0])))
+    m = dtr_m(dtr(arg[0]))
+    print m
+    print m.data
 
 if __name__ == '__main__':
     main()
