@@ -145,10 +145,15 @@ def writeGHCNMV3(out, series):
     # :todo: pick scale according to element.
     scale = 100
 
+    missing_year = [None]*12
+
     for m in range(0, len(series.data), 12):
         y = series.data[m:m+12]
-        if len(y) < 12:
-            y += [None]*(12-len(y))
+        # pad to length 12
+        y += missing_year[len(y):]
+        if y == missing_year:
+            # Year with no valid data; do not output.
+            continue
         y = [x*100 if x is not None else -9999 for x in y]
         year = series.firstyear + m//12
         out.write("%11s%04d%-4.4s" % (series.uid, year, series.element))
