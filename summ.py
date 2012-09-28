@@ -20,16 +20,16 @@ def summarise(out, uid, element=['TMIN', 'TMAX']):
         missing = 0
         for m in s.data:
             for v in m:
-                missing += v == s.MISSING
+                missing += v is None
         sys.stdout.write("missing days: %d\n" % missing)
     if 'TMIN' in element and 'TMAX' in element:
         min_missing = 0
         max_missing = 0
         for mn,mx in zip(rec.series['TMIN'].data, rec.series['TMAX'].data):
             for vn,vx in zip(mn,mx):
-                if vn == rec.MISSING and vx != rec.MISSING:
+                if vn is None and vx is not None:
                     min_missing += 1
-                if vx == rec.MISSING and vn != rec.MISSING:
+                if vx is None and vn is not None:
                     max_missing += 1
         sys.stdout.write("TMIN missing, TMAX present: %d\n" % min_missing)
         sys.stdout.write("TMAX missing, TMIN present: %d\n" % max_missing)
