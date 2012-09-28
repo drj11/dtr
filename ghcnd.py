@@ -12,9 +12,9 @@ class Series:
     particular element (specified by self.element).
     That value will be a list with one item per month, beginning with
     January of self.firstyear, each month will be a list of values for
-    each day.  Missing data will appear as the value *self.MISSING*
+    each day.  Missing data will appear as the value *None*
     """
-    MISSING = -9999
+
     def __init__(self, **k):
         self.data = []
         self.firstyear = None
@@ -56,7 +56,7 @@ class Series:
         while offset > len(self.data):
             year = self.firstyear + len(self.data) // 12
             month = len(self.data) % 12 + 1
-            pad = [self.MISSING for n in range(month_length(year, month))]
+            pad = [None for n in range(month_length(year, month))]
             self.data.append(pad)
 
         nitems = month_length(row['year'], row['month'])
@@ -68,17 +68,17 @@ class Series:
             v = int(v)
             if v != -9999:
                 if flags[1] != ' ':
-                    v = self.MISSING
+                    v = None
                 else:
                     v *= self.scale()
             else:
-                v = self.MISSING
+                v = None
             m.append(v)
         self.data.append(m)
 
 class Record:
     """Record multiple series for a given station."""
-    MISSING = -9999
+
     def __init__(self, **k):
         self.element = []
         self.series = {}
