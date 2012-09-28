@@ -124,6 +124,21 @@ ghcnd_fields = dict(
     data=       (21, 269, str)
 ).items()
 
+ghcnd_fields = dict(
+    uid=        (0,  11, str),
+    year=       (11, 15, int),
+    element=    (15, 19, str),
+    data=       (19, 115, str)
+).items()
+
+def rowtodict(l):
+    return dict((field, convert(l[p:q]))
+      for field,(p,q,convert) in ghcnd_fields)
+
+def mrowtodict(l):
+    return dict((field, convert(l[p:q]))
+      for field,(p,q,convert) in ghcnm_fields)
+
 def series(uid, element=['TMIN']):
     """Load GHCN-D data for station *uid* picking out all
     elements in the list *element*."""
@@ -131,9 +146,7 @@ def series(uid, element=['TMIN']):
     f = open("%s.dly" % uid, 'U')
     s = Record(uid=uid, element=element)
     for line in f:
-        row = {}
-        for field, (p,q,convert) in ghcnd_fields:
-            row[field] = convert(line[p:q])
+        row = rowtodict(line)
         s.append(row)
     return s
 
