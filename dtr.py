@@ -23,6 +23,8 @@ def two_way_dtr(uid):
     with monthly series for MDTR and TMMM (as well as TMIN and TMAX which
     are incidentally required).
     """
+    if uid.endswith('.dly'):
+        uid = uid.replace('.dly', '')
     rec = ghcnd.series(uid, element=['TMIN', 'TMAX'])
     m = monthly(dtr(rec))
     new = ghcnd.Record(uid=rec.uid,
