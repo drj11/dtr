@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-"""Read a stream containg MDTR and TMMM and show when they are
-different for any year.  Outputs a GHCN-M V3 style file with
-element type DMMD:
+"""Read a stream containing MDTR and TMMM and show differences
+Outputs a GHCN-M V3 style file with element type DMET:
 
-DMMD - Diurnal Method Monthly Difference (TMMM - MDTR)
+DMET - Diffeerence in Methods (for Diurnal Temperature); calculated
+       as TMMM - MDTR.
 
 value '-9999' indicates that TMMM was missing (and hence, so was
 MDTR), value ' 8888' indicates that TMMM was present, but MDTR
