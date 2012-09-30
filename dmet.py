@@ -52,7 +52,7 @@ def diff(inp, out):
                     l += ' 8888   '
                 else:
                     l += '%5d   ' % (int(d) - int(e))
-        out.write('%s%s%s\n' % (uidyear, 'DMMD', l))
+        out.write('%s%s%s\n' % (uidyear, 'DMET', l))
 
 def main(argv=None):
     import sys
