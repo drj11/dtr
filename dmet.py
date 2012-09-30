@@ -16,8 +16,16 @@ import itertools
 # Local
 import ghcnd
 
+def keep(inp, elems):
+    """Retain only (GHCN-M V3) rows with an element in
+    the list *elems*."""
+    for row in inp:
+        if row[15:19] in elems:
+            yield row
+
 def diff(inp, out):
-    for uidyear,block in itertools.groupby(sorted(inp), lambda l:l[:15]):
+    filtered = keep(inp, ['TMMM', 'MDTR'])
+    for uidyear,block in itertools.groupby(sorted(filtered), lambda l:l[:15]):
         b = list(block)
         l = ''
         if len(b) == 1:
