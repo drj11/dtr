@@ -21,7 +21,7 @@ def diff(inp, out):
         b = list(block)
         l = ''
         if len(b) == 1:
-            row = ghcnd.rowtodict(b[0])
+            row = ghcnd.mrowtodict(b[0])
             assert row['element'] == 'TMMM'
             for i in range(0,96,8):
                 d = row['data'][i:i+5]
@@ -31,7 +31,7 @@ def diff(inp, out):
                     l += ' 8888   '
         else:
             assert len(b) == 2
-            row = map(ghcnd.rowtodict, b)
+            row = map(ghcnd.mrowtodict, b)
             row = dict((r['element'], r) for r in row)
             tmmm = row['TMMM']['data']
             mdtr = row['MDTR']['data']

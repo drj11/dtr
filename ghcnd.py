@@ -124,7 +124,7 @@ ghcnd_fields = dict(
     data=       (21, 269, str)
 ).items()
 
-ghcnd_fields = dict(
+ghcnm_fields = dict(
     uid=        (0,  11, str),
     year=       (11, 15, int),
     element=    (15, 19, str),
