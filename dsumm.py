@@ -12,6 +12,8 @@ def GHCNMSeries(f):
     s = 0.0
     s2 = 0.0
     n = 0
+    # Largest (in magnitude) value.
+    M = 0
 
     for l in f:
         row = mrowtodict(l)
@@ -25,16 +27,20 @@ def GHCNMSeries(f):
                 s += v
                 s2 += v**2
                 n += 1
+                if abs(v) > abs(M):
+                    M = v
 
     xbar = s/n
     variance = (s2-xbar**2)/n
     sd = variance**0.5
-    return dict(uid=row['uid'], s=s, s2=s2, n=n, masked=masked, xbar=xbar, v=variance, sd=sd)
+    return dict(uid=row['uid'], s=s, s2=s2, n=n, M=M,
+      masked=masked, xbar=xbar, v=variance, sd=sd)
 
 
-def summ(fname):
+def summ(out, fname):
+    import json
     f = open(fname)
-    print GHCNMSeries(f)
+    json.dump(GHCNMSeries(f), out)
     
 
 def main(argv=None):
@@ -44,7 +50,7 @@ def main(argv=None):
         argv = sys.argv
     arg = argv[1:]
 
-    summ(arg[0])
+    summ(sys.stdout, arg[0])
 
 if __name__ == '__main__':
     main()
