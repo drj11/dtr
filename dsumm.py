@@ -15,6 +15,7 @@ def GHCNMSeries(f):
     # Largest (in magnitude) value.
     M = 0
 
+    row = None
     for l in f:
         row = mrowtodict(l)
         for i in range(0,96,8):
@@ -30,9 +31,17 @@ def GHCNMSeries(f):
                 if abs(v) > abs(M):
                     M = v
 
-    xbar = s/n
-    variance = (s2-xbar**2)/n
-    sd = variance**0.5
+    if n:
+        xbar = s/n
+        variance = (s2-xbar**2)/n
+        sd = variance**0.5
+    else:
+        xbar = None
+        variance = None
+        sd = None
+        M = None
+    if row is None:
+        return None
     return dict(uid=row['uid'], s=s, s2=s2, n=n, M=M,
       masked=masked, xbar=xbar, v=variance, sd=sd)
 
