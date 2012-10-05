@@ -2,14 +2,17 @@
 
 """Computing DTR - Diurnal Temperature Range.
 
-For output files using GHCN style element codes (TMIN, TMAX, and so on)
-we invent:
+dtr.py uid
+
+Writes a GHCN V3 style file (containing more than one element) to stdout.
+
+We invent the following GHCN style element codes:
 MDTR - Monthly Mean of Diurnal Temperature Range
-TMMM - Temperature Max Minus Min
+TEXS - Temperature Extremes Subtracted (Max Minus Min)
 
 Note MDTR is computed by first computing DTR for each day (as TMAX - TMIN) then
 averaging those for a month.
-TMMM is computed first by computing TMIN and TMAX for a month, and
+TEXS is computed first by computing TMIN and TMAX for a month, and
 subtracting the two values.
 """
 
@@ -20,7 +23,7 @@ import ghcnd
 
 def two_way_dtr(uid):
     """Load the daly record for station *uid* and return a record object
-    with monthly series for MDTR and TMMM (as well as TMIN and TMAX which
+    with monthly series for MDTR and TEXS (as well as TMIN and TMAX which
     are incidentally required).
     """
     if uid.endswith('.dly'):
@@ -28,23 +31,23 @@ def two_way_dtr(uid):
     rec = ghcnd.series(uid, element=['TMIN', 'TMAX'])
     m = monthly(dtr(rec))
     new = ghcnd.Record(uid=rec.uid,
-      element=['TMIN', 'TMAX', 'MDTR', 'TMMM'], firstyear=rec.firstyear)
+      element=['TMIN', 'TMAX', 'MDTR', 'TEXS'], firstyear=rec.firstyear)
     new.series['MDTR'] = m
     for elem in ['TMIN', 'TMAX']:
         new.series[elem] = monthly(rec.series[elem])
-    new.series['TMMM'] = tmmm(new)
+    new.series['TEXS'] = texs(new)
 
     return new
 
-def tmmm(rec):
+def texs(rec):
     """Given a record with monthly series for TMIN and TMAX, return
-    a series for TMMM.
+    a series for TEXS.
     """
 
     assert 'TMIN' in rec.series
     assert 'TMAX' in rec.series
 
-    new = ghcnd.Series(uid=rec.uid, element='TMMM', firstyear=rec.firstyear)
+    new = ghcnd.Series(uid=rec.uid, element='TEXS', firstyear=rec.firstyear)
     d = []
     for tn,tx in zip(rec.series['TMIN'].data, rec.series['TMAX'].data):
         if None in (tn,tx):
@@ -123,7 +126,7 @@ def main(argv=None):
 
     rec = two_way_dtr(arg[0])
     ghcnd.writeGHCNMV3(sys.stdout, rec.series['MDTR'])
-    ghcnd.writeGHCNMV3(sys.stdout, rec.series['TMMM'])
+    ghcnd.writeGHCNMV3(sys.stdout, rec.series['TEXS'])
     ghcnd.writeGHCNMV3(sys.stdout, rec.series['TMIN'])
     ghcnd.writeGHCNMV3(sys.stdout, rec.series['TMAX'])
 

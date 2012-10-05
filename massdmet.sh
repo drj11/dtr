@@ -1,8 +1,10 @@
 #!/bin/sh
 
-cd ghcnd_gsn
+mkdir -p work/dmet
+cd data/ghcnd_gsn
 for f in *.dly
 do
-    echo $f
-    ../dtr.py $f | ../dmet.py > ../dmet/$f
+    u=${f%.dly}
+    echo $u
+    ../../dtr.py $f | ../../dmet.py > ../../work/dmet/$u
 done
