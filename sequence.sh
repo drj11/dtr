@@ -28,13 +28,22 @@ untar_ghcnd_gsn () {
 }
 sync_dmet () {
     # The work/dmet directory is derived from the data/ghcnd_gsn directory.
-    if [ $(ls work/dmet|wc -l) -eq $(ls data/ghcnd_gsn|wc -l) ]
+    if [ $(ls work/dmet 2>&- |wc -l) -eq $(ls data/ghcnd_gsn 2>&- |wc -l) ]
     then
         return
     fi
     ./massdmet.sh
 }
+sync_dsumm () {
+    # The work/dsumm directory is derived from the work/dmet directory.
+    if [ $(ls work/dmet 2>&- |wc -l) -eq $(ls work/dsumm 2>&- |wc -l) ]
+    then
+        return
+    fi
+    ./massdsumm.sh
+}
 
 fetch_ghcnd_gsn
 untar_ghcnd_gsn
 sync_dmet
+sync_dsumm

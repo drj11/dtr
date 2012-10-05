@@ -1,9 +1,9 @@
 #!/bin/sh
 
-cd dmet
-for f in *.dly
+mkdir -p work/dsumm
+for f in work/dmet/*
 do
-    echo $f
-    g=${f%.dly}
-    ../dsumm.py $f > ../dsumm/$g
+    u=$(basename "$f")
+    echo $u
+    ./dsumm.py $f > work/dsumm/$u
 done
