@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Summarise the dsumm directory."""
+"""Summarise the work/dsumm directory."""
 
 import json
 import os
@@ -9,8 +9,9 @@ def seqsumm():
     """Yield sequence of summary objects, eliminating those
     that are null, and have fewer than 120 months.
     """
-    for n in os.listdir('dsumm'):
-        j = json.load(open(os.path.join('dsumm', n)))
+    dir = 'work/dsumm'
+    for n in os.listdir(dir):
+        j = json.load(open(os.path.join(dir, n)))
         if j is None or j['n'] < 120:
             continue
         yield j
