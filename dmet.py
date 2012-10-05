@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
-"""Read a stream containing MDTR and TMMM and show differences
+"""Read a stream containing MDTR and TEXS and show differences
 Outputs a GHCN-M V3 style file with element type DMET:
 
 DMET - Diffeerence in Methods (for Diurnal Temperature); calculated
-       as TMMM - MDTR.
+       as TEXS - MDTR.
 
-value '-9999' indicates that TMMM was missing (and hence, so was
-MDTR), value ' 8888' indicates that TMMM was present, but MDTR
+value '-9999' indicates that TEXS was missing (and hence, so was
+MDTR), value ' 8888' indicates that TEXS was present, but MDTR
 was missing.
 """
 
@@ -24,13 +24,13 @@ def keep(inp, elems):
             yield row
 
 def diff(inp, out):
-    filtered = keep(inp, ['TMMM', 'MDTR'])
+    filtered = keep(inp, ['TEXS', 'MDTR'])
     for uidyear,block in itertools.groupby(sorted(filtered), lambda l:l[:15]):
         b = list(block)
         l = ''
         if len(b) == 1:
             row = ghcnd.mrowtodict(b[0])
-            assert row['element'] == 'TMMM'
+            assert row['element'] == 'TEXS'
             for i in range(0,96,8):
                 d = row['data'][i:i+5]
                 if int(d) == -9999:
@@ -41,7 +41,7 @@ def diff(inp, out):
             assert len(b) == 2
             row = map(ghcnd.mrowtodict, b)
             row = dict((r['element'], r) for r in row)
-            tmmm = row['TMMM']['data']
+            tmmm = row['TEXS']['data']
             mdtr = row['MDTR']['data']
             for i in range(0,96,8):
                 d = tmmm[i:i+5]
