@@ -42,8 +42,13 @@ sync_dsumm () {
     fi
     ./massdsumm.sh
 }
+sync_dmet_txt () {
+    # No check to skip, yet.
+    ./summdsumm.py
+}
 
 fetch_ghcnd_gsn
 untar_ghcnd_gsn
 sync_dmet
 sync_dsumm
+sync_dmet_txt

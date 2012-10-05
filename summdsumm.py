@@ -36,7 +36,7 @@ def summ():
             mean = sum(x[k] for x in nz) / float(len(nz))
             variance = sum((x[k] - mean)**2 for x in nz) / float(len(nz))
             print '(non-zero)', 'mean', mean, 'sd', variance**0.5
-    with open('dmet.txt', 'w') as d:
+    with open('work/dmet.txt', 'w') as d:
         d.writelines("%s %s %s %s\n" %
           (s['uid'], s['M'], s['xbar'], s['n']) for s in l)
 
