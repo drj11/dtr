@@ -4,6 +4,28 @@
 
 IFS=''
 
+mkdir -p data
+
+fetch_ghcnd_gsn () {
+    if test -e data/ghcnd_gsn.tar.gz
+    then
+        return
+    fi
+    (
+    cd data
+    curl -O ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd_gsn.tar.gz
+    )
+}
+untar_ghcnd_gsn () {
+    if test -d data/ghcnd_gsn
+    then
+	return
+    fi
+    (
+    cd data
+    zcat ghcnd_gsn.tar.gz | tar xvf -
+    )
+}
 sync_dmet () {
     # The work/dmet directory is derived from the data/ghcnd_gsn directory.
     if [ $(ls work/dmet|wc -l) -eq $(ls data/ghcnd_gsn|wc -l) ]
@@ -13,19 +35,6 @@ sync_dmet () {
     ./massdmet.sh
 }
 
-mkdir -p data
-if ! test -e data/ghcnd_gsn.tar.gz
-then
-    (
-    cd data
-    curl -O ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd_gsn.tar.gz
-    )
-fi
-if ! test -d data/ghcnd_gsn
-then
-    (
-    cd data
-    zcat ghcnd_gsn.tar.gz | tar xvf -
-    )
-fi
+fetch_ghcnd_gsn
+untar_ghcnd_gsn
 sync_dmet
