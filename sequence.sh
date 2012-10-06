@@ -61,9 +61,17 @@ sync_dmet_txt () {
     fi
     ./summdsumm.py
 }
+make_station_dmet_png () {
+    if newer work/station-dmet.png work/dmet.txt
+    then
+        return
+    fi
+    R < hist.R --no-save
+}
 
 fetch_ghcnd_gsn
 untar_ghcnd_gsn
 sync_dmet
 sync_dsumm
 sync_dmet_txt
+make_station_dmet_png
