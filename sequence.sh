@@ -35,6 +35,9 @@ fetch_ghcnd_gsn () {
 fetch_ghcnd_meta () {
     fetch ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt
 }
+fetch_ghcnd_readme () {
+    fetch ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/readme.txt
+}
 untar_ghcnd_gsn () {
     if test -d data/ghcnd_gsn
     then
@@ -62,7 +65,8 @@ sync_dsumm () {
     ./massdsumm.sh
 }
 sync_dmet_txt () {
-    if newer work/dmet.txt work/dsumm
+    if newer work/dmet.txt work/dsumm &&
+      newer work/dmet.txt summdsumm.py
     then
         return
     fi
@@ -79,7 +83,8 @@ make_station_dmet_png () {
 fetch_ghcnd_gsn
 untar_ghcnd_gsn
 fetch_ghcnd_meta
+fetch_ghcnd_readme
 sync_dmet
 sync_dsumm
-sync_dmet_txt
+sync_dmet_txt &&
 make_station_dmet_png

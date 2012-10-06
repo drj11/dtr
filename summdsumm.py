@@ -5,6 +5,9 @@
 import json
 import os
 
+# Local
+import ghcnd
+
 def seqsumm():
     """Yield sequence of summary objects, eliminating those
     that are null, and have fewer than 120 months.
@@ -36,9 +39,15 @@ def summ():
             mean = sum(x[k] for x in nz) / float(len(nz))
             variance = sum((x[k] - mean)**2 for x in nz) / float(len(nz))
             print '(non-zero)', 'mean', mean, 'sd', variance**0.5
+    single_file_station_summaries(l)
+
+def single_file_station_summaries(summs):
+    """Write out stations summaries in a single file."""
+    meta = ghcnd.GHCNDMeta()
     with open('work/dmet.txt', 'w') as d:
-        d.writelines("%s %s %s %s\n" %
-          (s['uid'], s['M'], s['xbar'], s['n']) for s in l)
+        d.writelines("%s %s %s %s %s %s\n" %
+          (s['uid'], s['M'], s['xbar'], meta[s['uid']].latitude,
+          meta[s['uid']].longitude, s['n']) for s in summs)
 
 def main(argv=None):
     import sys
