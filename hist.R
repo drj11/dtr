@@ -21,4 +21,10 @@ plot(do.call(c, t[3]),do.call(c, t[4]),
   ylab="Station Latitude (degrees)",
   main="Relationship between Latitude and DMET")
 dev.off()
+png("work/elevation-dmet.png")
+plot(do.call(c, t[3]),do.call(c, t[6]),
+  xlab=expression("Average Monthly DMET (10"^-2*'K)'),
+  ylab="Station Elevation (metres)",
+  main="Relationship between Elevation and DMET")
+dev.off()
 
