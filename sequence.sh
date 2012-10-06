@@ -89,3 +89,14 @@ sync_dmet
 sync_dsumm
 sync_dmet_txt &&
 make_station_dmet_png
+
+if test -d ../http
+then
+    (
+    cd ../http
+    for a in ../git/work/*.png
+    do
+        ln -f -s $a
+    done
+    )
+fi
