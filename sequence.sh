@@ -6,6 +6,18 @@ IFS=''
 
 mkdir -p data
 
+newer () {
+    # true (exit status 0) when first argument is newer than second argument.
+    # false (exit status 1) otherwise.
+    # :todo: should probably do some error checking, like when $1 and $2
+    # are not files.
+    if [ "$(find "$1" -newer "$2" 2>&- )" ]
+    then
+        return 0
+    fi
+    return 1
+}
+
 fetch_ghcnd_gsn () {
     if test -e data/ghcnd_gsn.tar.gz
     then
@@ -43,7 +55,10 @@ sync_dsumm () {
     ./massdsumm.sh
 }
 sync_dmet_txt () {
-    # No check to skip, yet.
+    if newer work/dmet.txt work/dsumm
+    then
+        return
+    fi
     ./summdsumm.py
 }
 
