@@ -150,6 +150,36 @@ def series(uid, element=['TMIN']):
         s.append(row)
     return s
 
+class Station:
+    def __init__(self, **k):
+        self.__dict__.update(k)
+
+def GHCNDMeta():
+    """Return a dict of objects, indexed by the (11-character)
+    UID for a station.  The object holds the station
+    metadata."""
+    # See GHCND readme.txt
+
+    ghcnd_meta = dict(
+        uid=        (0,  11, str),
+        latitude=   (12, 20, float),
+        longitude=  (21, 30, float),
+        elevation=  (31, 37, float),
+        state=      (38, 40, str),
+        name=       (41, 71, str),
+        gsnflag=    (72, 75, str),
+        hcnflag=    (76, 79, str),
+        wmoid=      (80, 85, str),
+    ).items()
+
+    r = {}
+    for row in open("data/ghcnd-stations.txt"):
+        d = {}
+        for field,(p,q,convert) in ghcnd_meta:
+            d[field] = convert(row[p:q])
+        r[d['uid']] = Station(**d)
+    return r
+
 def writeGHCNMV3(out, series):
     """To the open file *out* write the series object in
     GHCN-M V3 format."""
