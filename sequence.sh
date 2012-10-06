@@ -28,6 +28,16 @@ fetch_ghcnd_gsn () {
     curl -O ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd_gsn.tar.gz
     )
 }
+fetch_ghcnd_meta () {
+    if test -e data/ghcnd-stations.txt
+    then
+        return
+    fi
+    (
+    cd data
+    curl -O ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt
+    )
+}
 untar_ghcnd_gsn () {
     if test -d data/ghcnd_gsn
     then
@@ -71,6 +81,7 @@ make_station_dmet_png () {
 
 fetch_ghcnd_gsn
 untar_ghcnd_gsn
+fetch_ghcnd_meta
 sync_dmet
 sync_dsumm
 sync_dmet_txt
