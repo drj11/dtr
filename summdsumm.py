@@ -45,9 +45,14 @@ def single_file_station_summaries(summs):
     """Write out stations summaries in a single file."""
     meta = ghcnd.GHCNDMeta()
     with open('work/dmet.txt', 'w') as d:
-        d.writelines("%s %s %s %s %s %s\n" %
-          (s['uid'], s['M'], s['xbar'], meta[s['uid']].latitude,
-          meta[s['uid']].longitude, s['n']) for s in summs)
+        for s in summs:
+            uid= s['uid']
+            m = meta[uid]
+            d.write("%s %s %s %s %s %s %s\n" % (
+              uid, s['M'], s['xbar'],
+              m.latitude, m.longitude,
+              m.elevation,
+              s['n']))
 
 def main(argv=None):
     import sys
