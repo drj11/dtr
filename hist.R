@@ -10,6 +10,15 @@ myRange <- function(a){
 t=read.table("work/dmet.txt")
 r=myRange(data.matrix(t[3]))
 png("work/station-dmet.png")
-hist(data.matrix(t[3]), breaks=seq(r[1], r[2]), main="Station Average Monthly DMET",
-  ylab="Station Count", xlab=expression("Average Monthly DMET ×10"^{-2}*"K"))
+hist(data.matrix(t[3]), breaks=seq(r[1], r[2]),
+  main="Station Average Monthly DMET",
+  ylab="Station Count",
+  xlab=expression("Average Monthly DMET ×10"^{-2}*"K"))
 dev.off()
+png("work/latitude-dmet.png")
+plot(do.call(c, t[3]),do.call(c, t[4]),
+  xlab=expression("Average Monthly DMET (10"^-2*'K)'),
+  ylab="Station Latitude (degrees)",
+  main="Relationship between Latitude and DMET")
+dev.off()
+
