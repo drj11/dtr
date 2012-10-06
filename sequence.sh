@@ -73,11 +73,12 @@ sync_dmet_txt () {
     ./summdsumm.py
 }
 make_station_dmet_png () {
-    if newer work/station-dmet.png work/dmet.txt
+    if newer work/station-dmet.png work/dmet.txt &&
+      newer work/station-dmet.png hist.R
     then
         return
     fi
-    R < hist.R --no-save
+    R --slave < hist.R
 }
 
 fetch_ghcnd_gsn
