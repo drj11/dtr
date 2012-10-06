@@ -18,25 +18,22 @@ newer () {
     return 1
 }
 
-fetch_ghcnd_gsn () {
-    if test -e data/ghcnd_gsn.tar.gz
+fetch () {
+    # Fetch $1 into data/$(basename $1) if and only if it isn't
+    # already there.
+    destination=$(basename "$1")
+    if test -e "data/$destination"
     then
         return
     fi
-    (
-    cd data
-    curl -O ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd_gsn.tar.gz
-    )
+    curl "$1" > "data/$destination"
+}
+
+fetch_ghcnd_gsn () {
+    fetch ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd_gsn.tar.gz
 }
 fetch_ghcnd_meta () {
-    if test -e data/ghcnd-stations.txt
-    then
-        return
-    fi
-    (
-    cd data
-    curl -O ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt
-    )
+    fetch ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt
 }
 untar_ghcnd_gsn () {
     if test -d data/ghcnd_gsn
