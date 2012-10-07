@@ -10,6 +10,18 @@ http://www.int-res.com/articles/cr/9/c009p197.pdf
   which is interesting but not directly applicable to our purpose.
   Uses daily data.  And ancient datasets.
 
+[KARLETAL1993]
+Asymmetric Trends of Daily Maximum and Minimum Temperature
+Thomas R. Karl, Philip D. Jones, Richard W. Knight, George Kukla,
+  Neil Plummer, Vyacheslav Razuvayev, Kevin P. Gallo,
+  Janette Lindseay, Robert J. Charlson, Thomas C. Peterson
+1993
+Bulletin of the American Meteorological Society
+Vol. 74, No. 6
+  Defines DTR as monthly TMAX - monthly TMIN.
+  Quite interesting so far.
+
+
 [BRAGANZAETAL2004]
 Diurnal temperature range as an index of global climate change during the twentieth century
 Karl Braganza, David J. Karoly, J. M. Arblaster
@@ -24,5 +36,4 @@ Imke Durre, John M. Wallace
 2001-08-01
 Journal of Climate, Volume 14, p3263-3278
   probably worth reading.
-
 
