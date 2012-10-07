@@ -37,3 +37,11 @@ plot(dmet,lat,pch=l,
   ylab="Station Latitude (degrees)",
   main="Relationship between Latitude and DMET")
 dev.off()
+png("work/euro-latitude.png")
+euro=read.table('work/euro.txt')
+edmet=do.call(c, euro[3])
+elat=do.call(c, euro[4])
+el=c('.','*','+','o','@')[1+floor(do.call(c, euro[7]) / 500)]
+plot(edmet,elat,pch=el)
+dev.off()
+
