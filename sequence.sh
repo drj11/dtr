@@ -2,6 +2,7 @@
 # sequence
 # do everything in sequence.
 
+set -e
 IFS=''
 
 mkdir -p data
@@ -39,6 +40,20 @@ fetch () {
     curl "$1" > "data/$destination"
 }
 
+make_links () {
+    if ! test -d ../http
+    then
+        return
+    fi
+    (
+    cd ../http
+    for a in ../git/work/*.png
+    do
+        ln -f -s $a
+    done
+    )
+}
+
 fetch_ghcnd_gsn () {
     fetch ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd_gsn.tar.gz
 }
@@ -67,9 +82,17 @@ make_dmet () {
     fi
     ./massdmet.sh
 }
+make_annual () {
+    if newer work/annual.json work/mdtr &&
+      newer work/annual.json anntem.py
+    then
+        return
+    fi
+    ./anntem.py work/mdtr > work/annual.json
+}
 sync_dsumm () {
     # The work/dsumm directory is derived from the work/dmet directory.
-    if [ $(ls work/dmet 2>&- |wc -l) -eq $(ls work/dsumm 2>&- |wc -l) ]
+    if dirs_eq work/dmet work/dsumm
     then
         return
     fi
@@ -77,7 +100,8 @@ sync_dsumm () {
 }
 sync_dmet_txt () {
     if newer work/dmet.txt work/dsumm &&
-      newer work/dmet.txt summdsumm.py
+      newer work/dmet.txt summdsumm.py &&
+      newer work/dmet.txt work/annual.json
     then
         return
     fi
@@ -97,17 +121,8 @@ untar_ghcnd_gsn
 fetch_ghcnd_meta
 fetch_ghcnd_readme
 make_dmet
+make_annual
 sync_dsumm
 sync_dmet_txt &&
 make_station_dmet_png
-
-if test -d ../http
-then
-    (
-    cd ../http
-    for a in ../git/work/*.png
-    do
-        ln -f -s $a
-    done
-    )
-fi
+make_links

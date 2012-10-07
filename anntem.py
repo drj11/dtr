@@ -12,7 +12,7 @@ import os
 import ghcnd
 
 def annual(out, dirname):
-    l = []
+    l = {}
     for n in os.listdir(dirname):
         r = {}
         with open(os.path.join(dirname, n)) as f:
@@ -25,7 +25,7 @@ def annual(out, dirname):
             for elem in ['TMIN', 'TMAX']:
                 r['annual_average_'+elem] = annual_average(
                   s.series[elem].data)
-        l.append(r)
+        l[r['uid']] = r
     json.dump(l, out)
 
 def annual_average(data):

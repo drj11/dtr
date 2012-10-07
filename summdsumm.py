@@ -49,14 +49,21 @@ def all_summaries(summs):
 def summaries_to_file(summs, out):
     """Write out stations summaries to a single file."""
     meta = ghcnd.GHCNDMeta()
+    annual = json.load(open('work/annual.json'))
     for s in summs:
         uid= s['uid']
         m = meta[uid]
-        out.write("%s %s %s %s %s %s %s\n" % (
+        tmin = None
+        tmax = None
+        if uid in annual:
+            tmin = annual[uid]['annual_average_TMIN']
+            tmax = annual[uid]['annual_average_TMAX']
+        out.write("%s %s %s %s %s %s %s %s %s\n" % (
           uid, s['M'], s['xbar'],
           m.latitude, m.longitude,
           m.elevation,
-          s['n']))
+          s['n'],
+          tmin, tmax))
 
 def eurobox_summaries(summs):
     """As single_file_station_summaries, but restricted to a box
