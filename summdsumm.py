@@ -39,20 +39,41 @@ def summ():
             mean = sum(x[k] for x in nz) / float(len(nz))
             variance = sum((x[k] - mean)**2 for x in nz) / float(len(nz))
             print '(non-zero)', 'mean', mean, 'sd', variance**0.5
-    single_file_station_summaries(l)
+    all_summaries(l)
+    eurobox_summaries(l)
 
-def single_file_station_summaries(summs):
-    """Write out stations summaries in a single file."""
+def all_summaries(summs):
+    with open('work/dmet.txt', 'w') as f:
+        summaries_to_file(summs, f)
+
+def summaries_to_file(summs, out):
+    """Write out stations summaries to a single file."""
     meta = ghcnd.GHCNDMeta()
-    with open('work/dmet.txt', 'w') as d:
-        for s in summs:
-            uid= s['uid']
-            m = meta[uid]
-            d.write("%s %s %s %s %s %s %s\n" % (
-              uid, s['M'], s['xbar'],
-              m.latitude, m.longitude,
-              m.elevation,
-              s['n']))
+    for s in summs:
+        uid= s['uid']
+        m = meta[uid]
+        out.write("%s %s %s %s %s %s %s\n" % (
+          uid, s['M'], s['xbar'],
+          m.latitude, m.longitude,
+          m.elevation,
+          s['n']))
+
+def eurobox_summaries(summs):
+    """As single_file_station_summaries, but restricted to a box
+    roughly around northwest europe.
+    """
+    with open('work/euro.txt', 'w') as f:
+        summaries_to_file(stations_in_box(summs, (-15, 15, 38, 70)), f)
+
+def stations_in_box(summs, box):
+    meta = ghcnd.GHCNDMeta()
+    w,e,s,n = box
+    for summ in summs:
+        m = meta[summ['uid']]
+        if ((s <= m.latitude < n) and
+          (w <= m.longitude < e)):
+            yield summ
+
 
 def main(argv=None):
     import sys
