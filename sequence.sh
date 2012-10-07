@@ -18,6 +18,16 @@ newer () {
     return 1
 }
 
+dirs_eq () {
+    # Check that directories $1 and $2 contain the same number
+    # of files.  Possibly we could do something more
+    # sophisticated here, but one complication is that when
+    # checking ghcnd_gsn and dmet we rely on different filenames
+    # (all the ghcnd_gsn files end in .dly).
+    # Return true if so.
+    test $(ls $1 2>&- | wc -l) = $(ls $2 2>&- | wc -l)
+}
+
 fetch () {
     # Fetch $1 into data/$(basename $1) if and only if it isn't
     # already there.
@@ -48,9 +58,10 @@ untar_ghcnd_gsn () {
     zcat ghcnd_gsn.tar.gz | tar xvf -
     )
 }
-sync_dmet () {
-    # The work/dmet directory is derived from the data/ghcnd_gsn directory.
-    if [ $(ls work/dmet 2>&- |wc -l) -eq $(ls data/ghcnd_gsn 2>&- |wc -l) ]
+make_dmet () {
+    # The work/dmet directory is derived from the data/ghcnd_gsn
+    # directory.
+    if dirs_eq work/dmet data/ghcnd_gsn
     then
         return
     fi
@@ -85,7 +96,7 @@ fetch_ghcnd_gsn
 untar_ghcnd_gsn
 fetch_ghcnd_meta
 fetch_ghcnd_readme
-sync_dmet
+make_dmet
 sync_dsumm
 sync_dmet_txt &&
 make_station_dmet_png

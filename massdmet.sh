@@ -1,10 +1,18 @@
 #!/bin/sh
 
+set -e
+IFS=''
+printf '%s\n' $0
+
 mkdir -p work/dmet
-cd data/ghcnd_gsn
-for f in *.dly
+mkdir -p work/mdtr
+for f in data/ghcnd_gsn/*.dly
 do
+    f=$(basename $f)
     u=${f%.dly}
-    echo $u
-    ../../dtr.py $f | ../../dmet.py > ../../work/dmet/$u
+    printf '\r%s' $u
+    ( cd data/ghcnd_gsn
+    ../../dtr.py $f ) > work/mdtr/$u
+    ./dmet.py < work/mdtr/$u > work/dmet/$u
 done
+printf '\n'
