@@ -5,6 +5,7 @@ See ftp://ftp.ncdc.noaa.goc/pub/data/ghcn/daily/readme.txt for
 details of the format (and location of the GHCN-D data).
 """
 
+import itertools
 import warnings
 
 class Series:
@@ -50,6 +51,11 @@ class Series:
         if self.firstyear is None:
             self.firstyear = row['year']
 
+        if 'month' in row:
+            return self.appendMonth(row)
+        return self.appendYear(row)
+
+    def appendMonth(self, row):
         # Pad out data if neccesary to cope with gaps.
         offset = 12*(row['year'] - self.firstyear) + row['month'] - 1
         assert offset >= len(self.data), "%(uid)s%(year)d%(month)02d time reversal" % row
@@ -75,6 +81,24 @@ class Series:
                 v = None
             m.append(v)
         self.data.append(m)
+
+    def appendYear(self, row):
+        m = []
+        for i in range(12):
+            s = row['data'][8*i:8*(i+1)]
+            v = s[:5]
+            flags = s[5:]
+            v = int(v)
+            if v != -9999:
+                if flags[1] != ' ':
+                    v = None
+                else:
+                    v *= 0.01
+            else:
+                v = None
+            m.append(v)
+        self.data.append(m)
+
 
 class Record:
     """Record multiple series for a given station."""
@@ -149,6 +173,16 @@ def series(uid, element=['TMIN']):
         row = rowtodict(line)
         s.append(row)
     return s
+
+def monthly(f, element=['TMIN', 'TMAX']):
+    """Load GHCN-M V3 data for all stations in file *f*.
+    Each station is yielded."""
+    for uid,rows in itertools.groupby(f, lambda l:l[:11]):
+        s = Record(uid=uid, element=element)
+        for line in rows:
+            row = mrowtodict(line)
+            s.append(row)
+        yield s
 
 class Station:
     def __init__(self, **k):
