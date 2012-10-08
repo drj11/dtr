@@ -8,10 +8,10 @@ myRange <- function(a){
   return(r)
 }
 t=read.table("work/dmet.txt")
-r=myRange(data.matrix(t[3]))
-dmet=do.call(c, t[3])
-lat=do.call(c, t[4])
-elev=do.call(c, t[6])
+r=myRange(t[,3])
+dmet=t[,3]
+lat=t[,4]
+elev=t[,6]
 png("work/station-dmet.png")
 hist(dmet, breaks=seq(r[1], r[2]),
   main="Station Average Monthly DMET",
@@ -31,7 +31,7 @@ plot(dmet,elev,
   main="Relationship between Elevation and DMET")
 dev.off()
 png("work/latitude-length-dmet.png")
-l=c('.','*','+','o','@')[1+floor(do.call(c, t[7]) / 500)]
+l=c('.','*','+','o','@')[1+floor(t[,7] / 500)]
 plot(dmet,lat,pch=l,
   xlab=expression("Average Monthly DMET (10"^-2*'K)'),
   ylab="Station Latitude (degrees)",
@@ -39,9 +39,9 @@ plot(dmet,lat,pch=l,
 dev.off()
 png("work/euro-latitude.png")
 euro=read.table('work/euro.txt')
-edmet=do.call(c, euro[3])
-elat=do.call(c, euro[4])
-el=c('.','*','+','o','@')[1+floor(do.call(c, euro[7]) / 500)]
+edmet=euro[,3]
+elat=euro[,4]
+el=c('.','*','+','o','@')[1+floor(euro[,7] / 500)]
 plot(edmet,elat,pch=el)
 dev.off()
 
