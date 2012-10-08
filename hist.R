@@ -12,6 +12,8 @@ r=myRange(t[,3])
 dmet=t[,3]
 lat=t[,4]
 elev=t[,6]
+tmin=t[,8]
+tmax=t[,9]
 png("work/station-dmet.png")
 hist(dmet, breaks=seq(r[1], r[2]),
   main="Station Average Monthly DMET",
@@ -43,5 +45,9 @@ edmet=euro[,3]
 elat=euro[,4]
 el=c('.','*','+','o','@')[1+floor(euro[,7] / 500)]
 plot(edmet,elat,pch=el)
+dev.off()
+png("work/tmax-dmet.png")
+plot(tmax,dmet)
+abline(lm(dmet~tmax))
 dev.off()
 
