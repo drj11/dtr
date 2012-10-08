@@ -53,8 +53,8 @@ def summaries_to_file(summs, out):
     for s in summs:
         uid= s['uid']
         m = meta[uid]
-        tmin = None
-        tmax = None
+        tmin = 'NA' # For compatibility with R
+        tmax = 'NA'
         if uid in annual:
             tmin = annual[uid]['annual_average_TMIN']
             tmax = annual[uid]['annual_average_TMAX']
