@@ -1,7 +1,7 @@
 # Example: ghcnd.station('WF000917530')
 ghcnd.station <- function(station) {
   filename <- paste('data/ghcnd_gsn/', station, '.dly', sep='')
-  s <- read.fwf(filename, c(11,4,2,4,rep(c(5,3),31)))
+  s <- read.fwf(filename, c(11,4,2,4,rep(c(5,3),31)), as.is=rep(6,66,2), sep='!', strip.white=FALSE)
   return(s)
 }
 ghcnd.station.element <- function(station, element) {
@@ -23,10 +23,7 @@ ghcnd.station.element.year <- function(station, element, year) {
   s <- s[s[,4]==element,]
   # Then extract year
   y <- s[s[,2]==year,]
-  res = rep(NA,31*12)
-  res[do.call(rbind, Map(ExpandDays, y[,3]))] <- do.call(cbind, y[,seq(5,66,2)])
-  res[res==-9999] = NA
-  return(res)
+  return(AsSingle(y))
 }
 
 MonthlyIndex <- function(base) {
@@ -38,10 +35,14 @@ MonthlyIndex <- function(base) {
     return(12*(y-base)+m)
   })
 }
+
 ghcnd.station.element.as.single <- function(station, element) {
   # A station's entire daily record for a single element
   s <- ghcnd.station(station)
   s <- s[s[,4]==element,]
+  return(AsSingle(s))
+}
+AsSingle <- function(s) {
   yearly.range = range(s[,2])
   # Number of years
   n = yearly.range[2] - yearly.range[1] + 1
@@ -53,6 +54,16 @@ ghcnd.station.element.as.single <- function(station, element) {
   d <- as.numeric(do.call(rbind, Map(ExpandDays, i)))
   res <- rep(NA, n*31*12)
   res[d] <- do.call(cbind, s[,seq(5,66,2)])
+
+  flags = rep(NA, n*31*12)
+  flags[d] <- as.matrix(s[,seq(6,66,2)])
+  # Remove all data that is flagged in any way.
+  res[substr(flags, 2,2) != " "] <- NA
+
+  # And remove data with the MISSING value.
   res[res==-9999] <- NA
   return(res)
 }
+# source('ghcnd.R')
+# s=ghcnd.station.element('UK000003808','TMIN')
+# e=ghcnd.station.element.as.single('UK000003808','TMIN')
