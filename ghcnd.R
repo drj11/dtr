@@ -42,6 +42,14 @@ ghcnd.station.element.as.single <- function(station, element) {
   s <- s[s[,4]==element,]
   return(AsSingle(s))
 }
+# Number of days in month for non-leap year.
+kMonthLength <- c(31,28,31,30,31,30,31,31,30,31,30,31)
+# Below, daily data is collected into years by pretending
+# each month has 31 days (so a pretend year has 372 days);
+# we use this mask to remove those pretend days. Note this
+# also removes all genuine Feb 29s.
+kYearMask <- floor(((seq(1,31*12)-1)%%31)+1) <= kMonthLength[ceiling(seq(1,31*12)/31)]
+
 AsSingle <- function(s) {
   yearly.range = range(s[,2])
   # Number of years
@@ -62,7 +70,27 @@ AsSingle <- function(s) {
 
   # And remove data with the MISSING value.
   res[res==-9999] <- NA
+
+  # Compress by converting from pretend year (see above) to
+  # real years.  Removes Feb 29 too.
+  res <- res[which(rep(kYearMask, n))]
   return(res)
+}
+DailyAnomalies <- function(s) {
+  # Convert a daily series (as returned by AsSingle) into
+  # anomalies by subtracting from each element the average
+  # for that day of the year.
+  m <- matrix(s, ncol=365, byrow=TRUE)
+  avg <- colMeans(m, na.rm=TRUE)
+  # Recycling ftw!
+  return(s-avg)
+}
+DailyAverage <- function(s) {
+  # Return a vector of the averages for each day of the year
+  # (the returned vector has length 365).
+  m <- matrix(s, ncol=365, byrow=TRUE)
+  avg <- colMeans(m, na.rm=TRUE)
+  return(avg)
 }
 # source('ghcnd.R')
 # s=ghcnd.station.element('UK000003808','TMIN')
