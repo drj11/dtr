@@ -1,4 +1,4 @@
-Notes about the actual investigation
+## Notes about the actual investigation
 
 Not very many stations near the equator.
 
@@ -8,3 +8,19 @@ Of the long record stations Mountain stations seem more prone to
 error.
 
 In europe, most of the larger DMETs are positive.
+
+Should probably eliminate Amundsen Scott from the analysis.
+It's not particular interesting, but it does feature as an
+outlier on any scatter that includes elevation, latitude, or
+temperature.
+
+## Procedural Notes
+
+Should use the WMO 3/5 rule.
+
+On Annual averages of Temperature Range (for example, see Figure
+6 of [KARLETAL1993] for Prague Klementinum-Observatory).  If
+Temperature Range has a seasonal component, then a simple
+average of all months in a year may be incorrect when the year
+has missing months.  Like GISTEMP for temperature, it may be
+necessary to go via monthly and seasonal anomalies first.
