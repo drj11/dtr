@@ -14,6 +14,12 @@ It's not particular interesting, but it does feature as an
 outlier on any scatter that includes elevation, latitude, or
 temperature.
 
+0 is incorrectly used for missing TMIN.  This grep:
+
+cat data/ghcnd_gsn/*.dly | egrep 'TMIN.*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ]' | cut -c1-11 | uniq
+
+show 33 stations have 10 or more exact zeroes in some month for TMIN.
+
 ## Procedural Notes
 
 Should use the WMO 3/5 rule.
