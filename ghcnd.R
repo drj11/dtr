@@ -95,20 +95,39 @@ PlotAnom <- function(df) {
   # Given the data frame returned by station.element() function
   # (and friends), plot the series as anomalies.
   s = AsSingle(df)
-  baseyear = min(df[,2])
-  element = df[1,4]
-  uid = df[1,1]
-  plot(baseyear+((1:length(s))-0.5)/365, DailyAnomalies(s),
-    ylab=paste(element, 'anomaly cK'), xlab='year', main=paste('GHCN-D', uid))
+  s = DailyAnomalies(s)
+  .plot(df, s, extra.label=' anomaly')
 }
 Plot <- function(df) {
-  # Plot series from data frame.
+  # Given the data frame returned by station.element() function
+  # (and friends), plot the series.
   s = AsSingle(df)
+  .plot(df, s)
+}
+PlotSeasonal <- function(df) {
+  s = AsSingle(df)
+  element = df[1, 4]
+  unit <- ''
+  if(element == 'TMIN' || element == 'TMAX') {
+      s <- s * 0.1
+      unit <- ' K'
+  }
+  uid = df[1, 1]
+  avg = DailyAverage(s)
+  plot(((1:(365*2))-0.5)/365, c(avg, avg),
+    ylab=paste(element, ' cycle', unit, sep=''), xlab='year offset', main=paste('GHCN-D', uid))
+}
+.plot <- function(df, s, extra.label='') {
   baseyear = min(df[, 2])
   element = df[1, 4]
+  unit <- ''
+  if(element == 'TMIN' || element == 'TMAX') {
+      s <- s * 0.1
+      unit <- ' K'
+  }
   uid = df[1, 1]
   plot(baseyear+((1:length(s))-0.5)/365, s,
-    ylab=paste(element, 'cK'), xlab='year', main=paste('GHCN-D', uid))
+    ylab=paste(element, extra.label, unit, sep=''), xlab='year', main=paste('GHCN-D', uid))
 }
 
 # source('ghcnd.R')
