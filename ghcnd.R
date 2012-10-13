@@ -117,6 +117,17 @@ PlotSeasonal <- function(df) {
   plot(((1:(365*2))-0.5)/365, c(avg, avg),
     ylab=paste(element, ' cycle', unit, sep=''), xlab='year offset', main=paste('GHCN-D', uid))
 }
+PlotZeroes <- function(df) {
+  # Plot showing the number of 0 values in each year.
+  s <- AsSingle(df)
+  element = df[1, 4]
+  uid = df[1, 1]
+  m <- matrix(s, ncol=365, byrow=TRUE)
+  r <- range(df[, 2])
+  plot(r[1]:r[2], rowSums(m==0, na.rm=TRUE),
+    ylab='zero count', xlab='year', main=paste('GHCN-D', uid))
+}
+
 .plot <- function(df, s, extra.label='') {
   baseyear = min(df[, 2])
   element = df[1, 4]
