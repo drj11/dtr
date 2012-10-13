@@ -38,8 +38,7 @@ MonthlyIndex <- function(base) {
 
 ghcnd.station.element.as.single <- function(station, element) {
   # A station's entire daily record for a single element
-  s <- ghcnd.station(station)
-  s <- s[s[,4]==element,]
+  s <- ghcnd.station.element(station, element)
   return(AsSingle(s))
 }
 # Number of days in month for non-leap year.
@@ -92,6 +91,26 @@ DailyAverage <- function(s) {
   avg <- colMeans(m, na.rm=TRUE)
   return(avg)
 }
+PlotAnom <- function(df) {
+  # Given the data frame returned by station.element() function
+  # (and friends), plot the series as anomalies.
+  s = AsSingle(df)
+  baseyear = min(df[,2])
+  element = df[1,4]
+  uid = df[1,1]
+  plot(baseyear+((1:length(s))-0.5)/365, DailyAnomalies(s),
+    ylab=paste(element, 'anomaly cK'), xlab='year', main=paste('GHCN-D', uid))
+}
+Plot <- function(df) {
+  # Plot series from data frame.
+  s = AsSingle(df)
+  baseyear = min(df[, 2])
+  element = df[1, 4]
+  uid = df[1, 1]
+  plot(baseyear+((1:length(s))-0.5)/365, s,
+    ylab=paste(element, 'cK'), xlab='year', main=paste('GHCN-D', uid))
+}
+
 # source('ghcnd.R')
 # s=ghcnd.station.element('UK000003808','TMIN')
 # e=ghcnd.station.element.as.single('UK000003808','TMIN')
