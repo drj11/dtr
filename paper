@@ -1,0 +1,23 @@
+# A Reminder on how to calculate Diurnal Temperature Range.
+
+## Paragraphs not yet placed
+
+[KARLETAL1993] suggest that it may be worth considering more precise
+technique to calculate DTR (on p1017).
+
+Quality.  5 stations in the UK have clear discrepencies in a
+multi-year period in the decade starting in 2001 for the TMIN element.
+The remaining UK station does have a long enough period for this
+analysis.  Consequently all UK stations in the GSN are discarded from
+this analysis.  Brief visual checks of all the stations (temperatures
+and anomalies for both TMIN and TMAX) were made; no further stations
+were discarded.
+
+While more workers may be choosing to do analyses with daily
+data series, it is still the case that due to their simplicitly,
+availability, and manageability, some workers may prefer working
+with monthly data series.  We urge compilers of monthly data series
+to publish (quality controlled) monthly averages of DTR.  This is
+the simplest way that workers can avoid the hazard of using TEXS.
+Datasets that are compiled primarily from underlying daily data
+(USHCN GHCND @@) should be able to do this most easily.
