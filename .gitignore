@@ -1,2 +1,6 @@
 *.pyc
 *.dly
+work
+data
+.RData
+.Rhistory
