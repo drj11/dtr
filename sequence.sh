@@ -59,6 +59,7 @@ fetch_ghcnd_gsn () {
 }
 fetch_ghcnd_meta () {
     fetch ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt
+    fetch ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-countries.txt
 }
 fetch_ghcnd_readme () {
     fetch ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/readme.txt
