@@ -10,6 +10,32 @@ ghcnd.station.element <- function(station, element) {
   return(s)
 }
 
+ghcnm.station <- function(station, dir='work/mdtr') {
+  filename <- paste(dir, station, sep='/')
+  # :todo: Why does the as.is not work?
+  s <- read.fwf(filename, c(11,4,4,rep(c(5,3),12)), as.is=rep(5,27,2), sep='!', strip.white=FALSE)
+  return(s)
+}
+ghcnm.station.element <- function(station, element, dir='work/mdtr') {
+  s <- ghcnm.station(station)
+  s <- s[s[, 3]==element, ]
+  return(s)
+}
+Months <- function(s) {
+  # *s* should be the result of ghcnm.station.element
+  # Convert to a single vector monthly values.
+  r <- range(s[, 2])
+  baseyear <- r[1]
+  n <- r[2] - baseyear + 1
+  # 2-dimensional array of indexes
+  m <- do.call(rbind, Map(function(y)((y-baseyear)*12+1):((y-baseyear)*12+12), s[, 2]))
+  res <- rep(NA, n*12)
+  res[m] <- do.call(cbind, s[, seq(4, 27, 2)])
+  # Remove data with the MISSING value.
+  res[res==-9999] <- NA
+  return(res)
+}
+
 ExpandDays <- function(x) {
   # Let *x* be a month index,
   # expand into a sequence of daily indexes.
@@ -50,6 +76,7 @@ kMonthLength <- c(31,28,31,30,31,30,31,31,30,31,30,31)
 kYearMask <- floor(((seq(1,31*12)-1)%%31)+1) <= kMonthLength[ceiling(seq(1,31*12)/31)]
 
 AsSingle <- function(s) {
+  # *s* should be the result from ghcnd.station.element or friends.
   yearly.range = range(s[,2])
   # Number of years
   n = yearly.range[2] - yearly.range[1] + 1
@@ -144,3 +171,4 @@ PlotZeroes <- function(df) {
 # source('ghcnd.R')
 # s=ghcnd.station.element('UK000003808','TMIN')
 # e=ghcnd.station.element.as.single('UK000003808','TMIN')
+# m=ghcnm.station.element('UK000003808','MDTR')
