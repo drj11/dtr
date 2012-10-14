@@ -22,6 +22,10 @@ cat data/ghcnd_gsn/*.dly | egrep 'TMIN.*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][
 
 show 33 stations have 10 or more exact zeroes in some month for TMIN.
 
+Idea: (compare with the duplicate check in [DURREETAL2010]) any 30
+day period with 20 or more duplicate values, should flag all of the
+duplicate values.
+
 ## Procedural Notes
 
 Should use the WMO 3/5 rule.
