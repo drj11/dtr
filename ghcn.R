@@ -11,15 +11,22 @@ ghcnd.station.element <- function(station, element) {
   return(s)
 }
 
-ghcnm.station <- function(station, dir='work/mdtr') {
-  filename <- paste(dir, station, sep='/')
+ghcnm.station <-
+function(station, file='work/dmet.ghcnv3') {
+  s <- GHCNM(file=file)
+  s <- s[s[, 1]==station, ]
+  return(s)
+}
+GHCNM <- function(file='work/dmet.ghcnv3') {
   # :todo: Why does the as.is not work?
-  s <- read.fwf(filename, c(11, 4, 4, rep(c(5, 3), 12)),
+  s <- read.fwf(file, c(11, 4, 4, rep(c(5, 3), 12)),
     as.is=rep(5, 27, 2), sep='!', strip.white=FALSE)
   return(s)
 }
-ghcnm.station.element <- function(station, element, dir='work/mdtr') {
-  s <- ghcnm.station(station, dir=dir)
+  
+ghcnm.station.element <-
+function(station, element, file='work/dmet.ghcnv3') {
+  s <- ghcnm.station(station, file=file)
   s <- s[s[, 3]==element, ]
   return(s)
 }
@@ -44,8 +51,10 @@ Months <- function(s) {
   res[res==8888] <- NA
   return(res)
 }
-ghcnm.station.list <- function(station, element, dir='work/mdtr') {
-  s <- ghcnm.station.element(station, element, dir=dir)
+ghcnm.station.list <-
+function(station, element, file='work/dmet.ghcnv3') {
+  # Return station as a list object.
+  s <- ghcnm.station.element(station, element, file=file)
   m <- Months(s)
   if (is.element(element, c('TMIN', 'TMAX', 'MDTR', 'DMET'))) {
     m <- m * 0.01
