@@ -6,6 +6,6 @@ stationid <- arg[1]
 element <- arg[2]
 source('ghcn.R')
 
-png(paste('work/', stationid, '-', element, '-anom.png', sep=''))
+png(paste('work/figure/', stationid, '-', element, '-anom.png', sep=''))
 PlotAnom(ghcnd.station.element(stationid, element))
 dev.off()

@@ -3,6 +3,8 @@
 
 IFS=''
 
+mkdir -p work/figure
+
 for f in data/ghcnd_gsn/*.dly
 do
     u=$(basename "$f" .dly)
