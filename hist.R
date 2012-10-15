@@ -1,3 +1,4 @@
+# Mostly just examples.
 myRange <- function(a){
   # A range where the beginning and end
   # both have a fractional part exactly equal to 0.5.
