@@ -16,6 +16,8 @@ It's not particular interesting, but it does feature as an
 outlier on any scatter that includes elevation, latitude, or
 temperature.
 
+A few DMETs are above 200 in magnitude.  EG USW00026615 1949-01
+
 0 is incorrectly used for missing TMIN.  This grep:
 
 cat data/ghcnd_gsn/*.dly | egrep 'TMIN.*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ]' | cut -c1-11 | uniq
