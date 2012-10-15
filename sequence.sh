@@ -83,6 +83,14 @@ make_dmet () {
     fi
     ./massdmet.sh
 }
+concat_dmet () {
+    f=$(ls -t work/dmet)
+    if newer work/dmet.ghcnv3 "$f"
+    then
+      return
+    fi
+    cat work/dmet/* > work/dmet.ghcnv3
+}
 make_annual () {
     if newer work/annual.json work/mdtr &&
       newer work/annual.json anntem.py
@@ -122,6 +130,7 @@ untar_ghcnd_gsn
 fetch_ghcnd_meta
 fetch_ghcnd_readme
 make_dmet
+concat_dmet
 make_annual
 sync_dsumm
 sync_dmet_txt &&
