@@ -13,6 +13,15 @@ this analysis.  Brief visual checks of all the stations (temperatures
 and anomalies for both TMIN and TMAX) were made; no further stations
 were discarded.
 
+Figure [XX work/b19401.png] illustrates the effect.  GHCN-D station
+USW00026615 year 1949, month January.  Note that 3 days have no valid
+TMAX, and 4 days have no valid TMIN (but in both cases, the missing days
+are isolated, so would still pass the WMO 3/5 rule).
+It so happens that in this month
+the days when TMIN is valid but TMAX is not are cold, and the days when
+TMAX is valid but TMIN is not are warm.  The difference in the result
+of the two different methods for calculating Daily Range is 2.4 ℃.
+
 While more workers may be choosing to do analyses with daily
 data series, it is still the case that due to their simplicitly,
 availability, and manageability, some workers may prefer working
@@ -20,4 +29,4 @@ with monthly data series.  We urge compilers of monthly data series
 to publish (quality controlled) monthly averages of DTR.  This is
 the simplest way that workers can avoid the hazard of using TEXS.
 Datasets that are compiled primarily from underlying daily data
-(USHCN GHCND @@) should be able to do this most easily.
+(USHCN GHCNM @@) should be able to do this most easily.
