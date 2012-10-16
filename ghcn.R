@@ -133,6 +133,29 @@ ghcnd.station.element.as.single <- function(station, element) {
   return(AsSingle(s))
 }
 
+GHCNDStation <- function(station, element) {
+  # Return a station as a list object.
+  s <- ghcnd.station.element(station, element)
+  d <- AsSingle(s)
+  if (is.element(element, c('TMIN', 'TMAX', 'MDTR'))) {
+    d <- d * 0.1
+  }
+  r <- range(s[, 2])
+  res <- list(uid=station, df=s, baseyear=r[1], lastyear=r[2], element=element, series=d)
+  return(res)
+}
+YM <- function(sl, year, month) {
+  # Extract a single month from a (daily) station.
+
+  # Number of days between Jan 1 and start of month.
+  moff = sum(kMonthLength[0:(month-1)])
+  # Number of days between start of series and start of year.
+  yoff = 365 * (year - sl$baseyear)
+  p = yoff + moff + 1
+  q = yoff + moff + kMonthLength[month]
+  return(sl$series[p:q])
+}
+
 # Number of days in month for non-leap year.
 kMonthLength <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
