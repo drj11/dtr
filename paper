@@ -5,6 +5,17 @@
 [KARLETAL1993] suggest that it may be worth considering more precise
 technique to calculate DTR (on p1017).
 
+When averaging daily (temperature) values into monthly values, it is
+usual to apply some sort of completeness check.  The ideal situation
+would be when there are no missing daily values, but requiring this may
+lead to the elimination of monthly values when there are in fact enough
+daily data to compute a reasonable monthly average. WMO recommends that a
+monthly value should not be computed when there are more than 10 missing
+days or 5 or more missing consecutively (section 4.8.4 of [WMO100]).
+For 30-year normals the stricter 3/5 rule is recommended [WMOTD341]:
+no more than 5 missing days and no more than 3 missing consecutively in
+any month.
+
 Quality.  5 stations in the UK have clear discrepencies in a
 multi-year period in the decade starting in 2001 for the TMIN element.
 The remaining UK station does have a long enough period for this
