@@ -95,21 +95,21 @@ def single_monthly_average(m):
 
 def qa_month(month):
     """Given a Month's worth of daily DTR data, retturn true if
-    it is satsifactory, return false otherwise.  We check that:
-    there is no missing gap longer that 2 records; and,
-    the total number of missing days is < 10.
+    it is satsifactory, return false otherwise.  We use the WMO
+    3/5 rule:  No more than 5 missing days and no more than 3 missing
+    consecutively.
     """
 
     missing = 0
     for isgap,block in itertools.groupby(month, lambda x:x is None):
         if isgap:
             b = list(block)
-            if len(b) > 2:
+            if len(b) > 3:
                 return False
             missing += len(b)
-    if missing < 10:
-        return True
-    return False
+    if missing > 5:
+        return False
+    return True
 
 def monthly_average(month):
     """Convert a sequence of values, in month, to a single average."""
