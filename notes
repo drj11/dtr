@@ -18,6 +18,8 @@ temperature.
 
 A few DMETs are above 200 in magnitude.  EG USW00026615 1949-01
 
+For an example closer to the prime meridian, try TS000060725 1985-03
+
 0 is incorrectly used for missing TMIN.  This grep:
 
 cat data/ghcnd_gsn/*.dly | egrep 'TMIN.*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ].*\b0  [^ ][- ]' | cut -c1-11 | uniq
