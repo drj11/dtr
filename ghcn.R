@@ -225,31 +225,36 @@ DailyAverage <- function(s) {
   avg <- colMeans(m, na.rm=TRUE)
   return(avg)
 }
-PlotAnom <- function(df) {
-  # Given the data frame returned by station.element() function
-  # (and friends), plot the series as anomalies.
-  s <- AsSingle(df)
-  s <- DailyAnomalies(s)
-  .plot(df, s, extra.label=' anomaly')
+PlotAnom <- function(sl) {
+  # Plot a (daily) station series as anomalies.
+  s <- DailyAnomalies(sl$series)
+  .Plot(sl, s, extra.label=' anomaly')
 }
-Plot <- function(df) {
-  # Given the data frame returned by station.element() function
-  # (and friends), plot the series.
-  s <- AsSingle(df)
-  .plot(df, s)
+Plot <- function(sl, extra.label='') {
+  # Plot a (daily) station series, as returned by GHCNDStation.
+  .Plot(sl, sl$series)
 }
-PlotSeasonal <- function(df) {
-  s <- AsSingle(df)
-  element <- df[1, 4]
+PlotSeasonal <- function(sl) {
+  # A plot showing 2 seasonal cycles from the daily station series,
+  # as returned by GHCNDStation.
+  avg <- DailyAverage(sl$series)
+  .Plot(sl, c(avg, avg), extra.label=' cycle', baseyear.label=FALSE)
+}
+.Plot <- function(sl, series, extra.label='', baseyear.label=TRUE) {
+  # Plots the vector series, labelling using metadata
+  # from sl.
   unit <- ''
-  if (element == 'TMIN' || element == 'TMAX') {
-      s <- s * 0.1
+  if (sl$element == 'TMIN' || sl$element == 'TMAX') {
       unit <- ' K'
   }
-  uid <- df[1, 1]
-  avg <- DailyAverage(s)
-  plot(((1:(365*2))-0.5)/365, c(avg, avg),
-    ylab=paste(element, ' cycle', unit, sep=''), xlab='year offset', main=paste('GHCN-D', uid))
+  if (baseyear.label) {
+      base <- sl$baseyear
+  } else {
+      base <- 0
+  }
+  plot(base+((1:length(series))-0.5)/365, series,
+    ylab=paste(sl$element, extra.label, unit, sep=''),
+    xlab='year', main=paste('GHCN-D', sl$uid))
 }
 PlotZeroes <- function(df) {
   # Plot showing the number of 0 values in each year.
@@ -260,20 +265,6 @@ PlotZeroes <- function(df) {
   r <- range(df[, 2])
   plot(r[1]:r[2], rowSums(m==0, na.rm=TRUE),
     ylab='zero count', xlab='year', main=paste('GHCN-D', uid))
-}
-
-.plot <- function(df, s, extra.label='') {
-  baseyear <- min(df[, 2])
-  element <- df[1, 4]
-  unit <- ''
-  if (element == 'TMIN' || element == 'TMAX') {
-      s <- s * 0.1
-      unit <- ' K'
-  }
-  uid <- df[1, 1]
-  plot(baseyear+((1:length(s))-0.5)/365, s,
-    ylab=paste(element, extra.label, unit, sep=''),
-    xlab='year', main=paste('GHCN-D', uid))
 }
 
 # source('ghcnd.R')
