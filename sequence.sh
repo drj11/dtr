@@ -118,11 +118,11 @@ sync_dmet_txt () {
 }
 make_station_dmet_png () {
     if newer work/station-dmet.png work/dmet.txt &&
-      newer work/station-dmet.png hist.R
+      newer work/station-dmet.png figures.R
     then
         return
     fi
-    R --slave < hist.R
+    R --slave < figures.R
 }
 
 fetch_ghcnd_gsn
