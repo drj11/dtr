@@ -1,9 +1,40 @@
 # A Reminder on how to calculate Diurnal Temperature Range.
 
+# Abstract
+
+We find that in many published studies
+the methods used to calculate diurnal temperature range (DTR)
+are not always specified (in particular
+for monthly averages of DTR), or are specified only implicitly.  In light
+of this, we study the differences that arise between two reasonable
+choices of method.  In this study, the methods lead to values for
+monthly average DTR that may differ by more than 2 K.  We find that for
+many stations the distribution of the differences is not symmetric and
+there is an average bias between the two methods.  This bias is present
+even when entire networks are considered.  Some stations may exhibit an
+artificial trend in monthly DTR that is due to choice of method.
+
+# Intro
+
+Daily Temperature Range is XX [description here, and why it is
+climatologically interesting].  DTR is not a directly observed quantity,
+it is derived from measurements of TMIN and TMAX (the minimum and maximum
+temperature obtained in a day).
+
 ## Paragraphs not yet placed
 
 [KARLETAL1993] suggest that it may be worth considering more precise
 technique to calculate DTR (on p1017).
+
+Method M.  Daily maximum temperature is averaged into a monthly TMAX;
+daily minimum temperature is averaged into a monthly TMIN.  Monthly
+DTR is then computed as TMAX-TMIN.  Note that it is easy to use Method M
+on collections of monthly data (such as GHCN-M, USHCN).
+
+Method D.  Each day's minimum temperature is subtracted from its maximum
+temperature to produce a daily DTR series.  The daily DTR series is then
+averaged into a monthly DTR.  Note that Method D requires that reasonable
+quality daily data be available.
 
 When averaging daily (temperature) values into monthly values, it is
 usual to apply some sort of completeness check.  The ideal situation
