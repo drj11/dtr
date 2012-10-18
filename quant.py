@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 
-"""Script to assess whether a data series has been quantised (more coarsely than the 0.1C precision)."""
+"""Script to assess whether a data series has been quantised (more coarsely than the 0.1C precision).
+
+The basic idea is:
+take first differences of a daily series, and then fit to a n*k model (where n is an integer),
+in Hough transform style.  In detail, let d be the first difference.  Add 1 to the point
+(n, k) for all integer n and k > 1 and such that n*k = d.  Any k with lots of score is
+the quantisation amount.
+
+"""
 
 import ghcnd
 import math
@@ -19,7 +27,6 @@ def quant_one_elem(series):
         year = series.firstyear + m//12
         year_d = itertools.chain(*series.data[m:m+12])
         year_d = list(year_d)
-        assert len(year_d) in [365,366]
         year_d = [x for x in year_d if x is not None]
         year_d = [abs(p-q) for p,q in zip(year_d, year_d[1:])]
         if not year_d:
@@ -28,10 +35,10 @@ def quant_one_elem(series):
 
 def q_year(year, data):
     # upper limit of quantisation
-    U = 11
+    U = 13
     # lower limit
     L = 1
-    res = [0]*12
+    res = [0]*(U+1)
     for x in data:
         x = float(x)
         for n in range(max(1, int(math.floor(x/U))), int(math.ceil(x/L) + 1)):
