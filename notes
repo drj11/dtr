@@ -30,6 +30,12 @@ Idea: (compare with the duplicate check in [DURREETAL2010]) any 30
 day period with 20 or more duplicate values, should flag all of the
 duplicate values.
 
+Idea: (not really much to do with DTR) detect when temperatures are quantised
+by taking first differences, and then fitting to a n*k model (where n is an integer),
+in Hough transform style.  In detail, let d be the first difference.  Add 1 to the point
+(n, k) for all integer n and k > 1 and such that n*k = d.  Any k with lots of score is
+the quantisation amount.
+
 ## Procedural Notes
 
 Should use the WMO 3/5 rule.
