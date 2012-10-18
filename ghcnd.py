@@ -6,6 +6,7 @@ details of the format (and location of the GHCN-D data).
 """
 
 import itertools
+import os
 import warnings
 
 class Series:
@@ -26,7 +27,7 @@ class Series:
         return ("Series(uid=%(uid)r, element=%(element)r, firstyear=%(firstyear)r)" %
           self.__dict__)
 
-    def scale(self):
+    def scaleFactor(self):
         """The scale value from units stored in the file to the
         natural units store in this object.  For TMIN and TMAX
         it is 0.1 (units of 0.1 C).
@@ -76,7 +77,8 @@ class Series:
                 if flags[1] != ' ':
                     v = None
                 else:
-                    v *= self.scale()
+                    if self.scale:
+                        v *= self.scaleFactor()
             else:
                 v = None
             m.append(v)
@@ -163,12 +165,17 @@ def mrowtodict(l):
     return dict((field, convert(l[p:q]))
       for field,(p,q,convert) in ghcnm_fields)
 
-def series(uid, element=['TMIN']):
+def series(uid, element=['TMIN'], file=None, dir=None, scale=True):
     """Load GHCN-D data for station *uid* picking out all
     elements in the list *element*."""
 
-    f = open("%s.dly" % uid, 'U')
-    s = Record(uid=uid, element=element)
+    if file is None:
+        file = "%s.dly" % uid
+    if dir:
+        file = os.path.join(dir, file)
+
+    f = open(file, 'U')
+    s = Record(uid=uid, element=element, scale=scale)
     for line in f:
         row = rowtodict(line)
         s.append(row)
