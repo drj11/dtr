@@ -8,6 +8,9 @@ in Hough transform style.  In detail, let d be the first difference.  Add 1 to t
 (n, k) for all integer n and k > 1 and such that n*k = d.  Any k with lots of score is
 the quantisation amount.
 
+We could test each count[k] using R's binom.test (the probably of "success" for a candidate
+quantisation amount is 1/k).
+
 """
 
 import ghcnd
@@ -15,13 +18,21 @@ import math
 import itertools
 
 def quant(uid):
-    station = ghcnd.series(uid, element=['TMIN'], dir='data/ghcnd_gsn', scale=False)
+    station = ghcnd.series(uid, element=['TMIN', 'TMAX'], dir='data/ghcnd_gsn', scale=False)
     for element,series in station.series.items():
         quant_one_elem(series)
+        print uid, element
+        for year,data in sorted(series.quantise.items()):
+            hist_q_year(year, data)
 
 def quant_one_elem(series):
-    """Identify the quantisation in each year of the series."""
+    """Compute quantisations for each year of the series.
+    *Series* is augmented with a .quantise property which
+    is a dictionary that maps from year to a count array, a,
+    where a[k] gives the counts for the hypothesis that the data
+    is quantised to multiples of k."""
 
+    series.quantise = {}
     # Do one year at a time.
     for m in range(0, len(series.data), 12):
         year = series.firstyear + m//12
@@ -31,7 +42,7 @@ def quant_one_elem(series):
         year_d = [abs(p-q) for p,q in zip(year_d, year_d[1:])]
         if not year_d:
           continue
-        q_year(year, year_d)
+        series.quantise[year] = q_year(year, year_d)
 
 def q_year(year, data):
     # upper limit of quantisation
@@ -45,14 +56,18 @@ def q_year(year, data):
             k = int(round(x/n))
             if k*n == x and k < len(res):
                 res[k] += 1
-    print year
-    M = max(*res)
+    return res
+
+def hist_q_year(y, l):
+    """Histogram of result of q_year."""
+    print y
+    M = max(*l)
     s = 1
     c = '*'
     if M > 77:
         s = 5
         c = '@'
-    for i,k in enumerate(res):
+    for i,k in enumerate(l):
         if i == 0:
             continue
         print "%02d" % i, c * (k//s)
