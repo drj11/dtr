@@ -29,7 +29,25 @@ DAIETAL1999:
   pubdate: 1998-08
   journal: Journal of Climate
   place: Vol 12, page 2451-2473
-  note: Looks thorough.  Should read.  Looks like it might use GHCN-M for DTR.
+  url: https://github.com/drj11/paper/raw/master/1520-0442(1999)012-2451:eocsmp-2.0.co;2.pdf
+  note: |
+    Looks thorough.  Should read.  Looks like it might use GHCN-M for DTR.
+    Uses daily data (synoptic Tmin and Tmax extracted from NCAR DS464.0) for correlation analysis with
+    surface humidity, moisture, wind, cloud, precipitation.  Uses gridded monthly Tmin and Tmax (from GHCN v2)
+    for cloud and precipitation correlation on decadal time scales.
+
+HANSENETAL1995:
+  title: "Long-term changes of the diurnal temperature cycle: Implications about mechanisms of global climate change."
+  author:
+  - J. Hansen
+  - Mki. Sato
+  - R. Ruedy
+  pubdate: 1995
+  journal: Atmos. Res.
+  place: 37, 175-209
+  doi: doi:10.1016/0169-8095(94)00077-Q
+  url: http://pubs.giss.nasa.gov/docs/1995/1995_Hansen_etal_2.pdf
+  note: Uses same obs as [KARLETAL1993]
 
 KARLETAL1993:
   title: Asymmetric Trends of Daily Maximum and Minimum Temperature
@@ -120,7 +138,7 @@ EASTERLINGETAL1997:
   note: Cited by [BRAGANZAETAL2004] and [VOSEETAL2005]
 
 VOSEETAL2005:
-  title: Maximum and minimum temperature trends for the globe: An update through 2004
+  title: "Maximum and minimum temperature trends for the globe: An update through 2004"
   author:
     - R. S. Vose
     - D. R. Easterling
