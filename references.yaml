@@ -1,0 +1,136 @@
+FLORA1920:
+  title: Shading instrument shelters
+  author: Flora, S. D.
+  pubdate: 1920
+  journal: Mon. Weather Rev.
+  place: 48,271 – 272.
+  note: Could be amusing if i can find it.
+
+LEATHERSETAL1998:
+  title: Climatology of the daily temperature range annual cycle in the united states
+  author:
+    - Leathers, D. J.
+    - Palecki, M. A.
+    - Robinson, D. A.
+    - Dewey, K. F.
+  pubdate: 1998
+  journal: Climate Research
+  place: Vol 9, Number 3, p197-211
+  url: http://www.int-res.com/articles/cr/9/c009p197.pdf
+  note: |
+    Looks like a pretty thorough survey of DTR in the US, and in
+    particular its annual cycle.  Discusses relationship with
+    other meteorological elements (such as snow and precipitation),
+    which is interesting but not directly applicable to our purpose.
+    Uses daily data.  And ancient datasets.
+
+DAIETAL1999:
+  title: Effects of Clouds, Soil Moisture, Precipitation, and Water Vapor on Diurnal Temperature Range
+  pubdate: 1998-08
+  journal: Journal of Climate
+  place: Vol 12, page 2451-2473
+  note: Looks thorough.  Should read.  Looks like it might use GHCN-M for DTR.
+
+KARLETAL1993:
+  title: Asymmetric Trends of Daily Maximum and Minimum Temperature
+  author:
+    - Thomas R. Karl
+    - Philip D. Jones
+    - Richard W. Knight
+    - George Kukla
+    - Neil Plummer
+    - Vyacheslav Razuvayev
+    - Kevin P. Gallo
+    - Janette Lindseay
+    - Robert J. Charlson
+    - Thomas C. Peterson
+  pubdate: 1993-06
+  journal: Bulletin of the American Meteorological Society
+  place: Vol. 74, No. 6
+  note: |
+    Defines DTR as monthly TMAX - monthly TMIN.  Quite interesting so far.
+    Notable for the assembling of national collections into a dataset
+    covering the Northern hemisphere (and a less than representative portion
+    of the Southern hemisphere).  Analysis is regional, seasonal, and
+    mostly restricted to 1950 onwards (by availability of data).  Discusses
+    possible influence of urbanisation, irrigation, and desertification on
+    the long term change in Temperature Range.  Regress DTR**0.5 against
+    various synoptic climate variables.  The justification for the square
+    root (p1017) seems rather hand-wavy (explanatory power goes from 53%
+    without square root to 55% with square root.  hah!).  Concludes that
+    some changes in DTR may be attributable to cloud cover changes,
+    possibly anthropogenic, but more modelling is necessary.
+
+BRAGANZAETAL2004:
+  title: Diurnal temperature range as an index of global climate change during the twentieth century
+  author:
+    - Karl Braganza
+    - David J. Karoly
+    - J. M. Arblaster
+  pubdate: 2004
+  journal: Geophysical Research letters
+  place: Vol. 31, L13217
+  doi: doi:10.1029/2004GL019998
+  note: |
+    probably worth reading.
+    Uses monthly Tmin Tmax data, specifically, CRU TS 2.0 (at least, I think
+    CRU TS 2.0 is monthly).  Comparison to GCMs.  Land mask for areas with
+    reasonable converage.  GCMs do not accurately portray decedal trends
+    in DTR.  Possibly cloud modelling is the problem.
+
+DURREWALLACE2001:
+  title: Factors Influencing the Cold-Season Diurnal Temperature Range in the United States
+  author:
+    - Imke Durre
+    - John M. Wallace
+  pubdate: 2001-08-01
+  journal: Journal of Climate
+  place: Volume 14, p3263-3278
+  note: probably worth reading.
+
+BUCHERDESSENS1991:
+  title: Secular trend of surface temperature at an elevated observatory in the Pyrenees
+  author:
+    - A. Bücher
+    - J. Dessens
+  pubdate: 1991
+  journal: J. Climate
+  place: Volume 4, p859-868
+  note: |
+    Might be worth for a single station analysis (cited by
+    [KARLETAL1993]).  The station is Pic du Midi du Begorre.
+
+EASTERLINGETAL1997:
+  title: Maximum and minimum temperature trends for the globe
+  author:
+   - D.R. Easterling D.R.
+   - B. Horton
+   - P.D. Jones
+   - T.C. Peterson
+   - R.R. Karl
+   - D.E. Parker
+   - M.J. Salinger
+   - V.  Razuvayev
+   - N. Plummer
+   - P. Jamason
+   - C.K. Folland
+  pubdate: 1997
+  journal: Science
+  place: 277, 364 – 367.
+  note: Cited by [BRAGANZAETAL2004] and [VOSEETAL2005]
+
+VOSEETAL2005:
+  title: Maximum and minimum temperature trends for the globe: An update through 2004
+  author:
+    - R. S. Vose
+    - D. R. Easterling
+    - B. Gleason
+  pubdate: 2005-12-14
+  journal: Geophys. Res. Lett.
+  place: 32, L23822
+  doi: doi:10.1029/2005GL024379
+  note: |
+    WARNING: I've only got the NOAA summary, not the GRL print or pre-print.
+    Short (3 pages).  Data from GHCN-M and GHCN-D, WWR, and a bunch of national collections.
+    Mins Maxs and DTRs.  With a nice coverage map.
+
