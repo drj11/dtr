@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 # Mostly just examples.
 myRange <- function(a){
   # A range where the beginning and end
@@ -62,8 +64,16 @@ tminall <- GHCNDStation(stationid, 'TMIN')
 tmaxall <- GHCNDStation(stationid, 'TMAX')
 tmin = YM(tminall, year, month)
 tmax = YM(tmaxall, year, month)
-plot(ts(tmax), xlab='day', ylab='temperature, ℃',
+# 1 where min exists and max doesn't.
+minpoints = (!is.na(tmin)) * is.na(tmax)
+minpoints[minpoints == 0] <- NA
+# 1 where max exists and min doesn't.
+maxpoints = (!is.na(tmax)) * is.na(tmin)
+maxpoints[maxpoints == 0] <- NA
+plot(x=rep(1:length(tmin),2), y=c(tmin,tmax), pch=c(minpoints,maxpoints),
+  xlab='day', ylab='temperature, ℃',
   main=paste('GHCN-D', stationid, sprintf('%04d-%02d', year, month), 'TMAX,TMIN'),
-  ylim=range(tmax, tmin, na.rm=TRUE), col='red')
+  ylim=range(tmax, tmin, na.rm=TRUE))
+lines(ts(tmax), col='red')
 lines(ts(tmin), col='blue')
 dev.off()
