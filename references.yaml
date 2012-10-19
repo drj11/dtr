@@ -90,11 +90,39 @@ BRAGANZAETAL2004:
   place: Vol. 31, L13217
   doi: doi:10.1029/2004GL019998
   note: |
-    probably worth reading.
-    Uses monthly Tmin Tmax data, specifically, CRU TS 2.0 (at least, I think
-    CRU TS 2.0 is monthly).  Comparison to GCMs.  Land mask for areas with
-    reasonable converage.  GCMs do not accurately portray decedal trends
-    in DTR.  Possibly cloud modelling is the problem.
+    worth reading.
+    Uses monthly Tmin Tmax data, specifically, CRU TS 2.0 (ah really? CRU TS 2.0 publishes DTR directly).
+    Comparison to GCMs.  Land mask for areas with reasonable converage.
+    GCMs do not accurately portray decedal trends in DTR.  Possibly cloud
+    modelling is the problem.
+
+MITCHELLJONES2005:
+  title: >
+    An improved method of constructing a database of monthly
+    climate observations and associated high-resolution grids
+  author:
+    - Timothy D. Mitchell
+    - Philip D. Jones
+  pubdate: 2005
+  journal: International Journal of Climatology
+  place: "25: 693–712"
+  doi: doi:10.1002/joc.1181
+  url: http://sdwebx.worldbank.org/climateportal/doc/mitchelljones.pdf
+  note: Describes CRU TS 2.1
+
+PETERSONETAL1997:
+  title: Initial Selection of a GCOS Surface Network
+  author:
+    - Thomas Peterson
+    - Harald Daan
+    - Philip Jones
+  pubdate: 1997-10
+  journal: Bulletin of the American Meteorological Society
+  place: Vol. 78, No. 10
+  url: http://financingwaterforall.org/fileadmin/wma/documents/gcos_GSN_Selection.pdf
+  url: http://journals.ametsoc.org/doi/pdf/10.1175/1520-0477%281997%29078%3C2145%3AISOAGS%3E2.0.CO%3B2
+  doi: 10.1175/1520-0477(1997)078<2145:ISOAGS>2.0.CO;2
+  notes: describe GSN?
 
 DURREWALLACE2001:
   title: Factors Influencing the Cold-Season Diurnal Temperature Range in the United States
