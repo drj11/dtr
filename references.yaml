@@ -24,6 +24,19 @@ LEATHERSETAL1998:
     which is interesting but not directly applicable to our purpose.
     Uses daily data.  And ancient datasets.
 
+MENNEETAL2009
+  title: The United States Historical Climatology Network Monthly Temperature Data - Version 2.
+  author:
+    - M.J. Menne
+    - C.N. Williams
+    - R.S. Vose
+  pubdate: 2009
+  journal: Bull. Amer. Meteor. Soc.
+  place: 90, 993-1007
+  doi: doi:10.1175/2008BAMS2613.1
+  url: ftp://ftp.ncdc.noaa.gov/pub/data/ushcn/v2/monthly/menne-etal2009.pdf
+  note: Canonical reference for USHCN dataset.
+
 DAIETAL1999:
   title: Effects of Clouds, Soil Moisture, Precipitation, and Water Vapor on Diurnal Temperature Range
   pubdate: 1998-08
