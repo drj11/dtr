@@ -40,7 +40,9 @@ quality daily data be available.
 [VOSEETAL2005] uses monthly data.  [DAIETAL1999] uses a mixture of daily
 and monthly data (but when considering monthly averages, appears to use
 Method M).  Clearly when the data has already been compiled into monthly
-averages, only Method M can be used.
+averages, only Method M can be used. [DURREWALLACE2001] uses daily data,
+the Summary of the Day First Order (FSOD) from the
+National Climatic Data Center.
 
 When averaging daily (temperature) values into monthly values, it is
 usual to apply some sort of completeness check.  The ideal situation
