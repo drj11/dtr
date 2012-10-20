@@ -16,10 +16,15 @@ artificial trend in monthly DTR that is due to choice of method.
 
 # Intro
 
-Daily Temperature Range is XX [description here, and why it is
-climatologically interesting].  DTR is not a directly observed quantity,
-it is derived from measurements of TMIN and TMAX (the minimum and maximum
-temperature obtained in a day).
+Daily Temperature Range (DTR) is the range over which temperature varies during
+a day.  It is usually defined as $$ TMIN - TMAX $$ where TMIN is the minimum
+temperature in a day, and TMAX is the maximum temperature in a day.  In this study
+we are only concerned with measurements of land surface air temperatures.
+
+It is common in climate studies to use monthly averages of various climate
+elements.  For TMIN and TMAX the monthly average is usually made available
+in compilations of monthly climate data.  However, DTR is usually not (for
+example, it is not published in GHCN-M or USHCN [MENNEETAL2009].
 
 ## Paragraphs not yet placed
 
