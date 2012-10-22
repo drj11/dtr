@@ -24,7 +24,7 @@ LEATHERSETAL1998:
     which is interesting but not directly applicable to our purpose.
     Uses daily data.  And ancient datasets.
 
-MENNEETAL2009
+MENNEETAL2009:
   title: The United States Historical Climatology Network Monthly Temperature Data - Version 2.
   author:
     - M.J. Menne
@@ -36,6 +36,21 @@ MENNEETAL2009
   doi: doi:10.1175/2008BAMS2613.1
   url: ftp://ftp.ncdc.noaa.gov/pub/data/ushcn/v2/monthly/menne-etal2009.pdf
   note: Canonical reference for USHCN dataset.
+
+MENNEETAL2012:
+  title: An Overview of the Global Historical Climatology Network-Daily Database
+  author:
+    - Matthew J. Menne
+    - Imke Durre
+    - Russell S. Vose
+    - Byron E. Gleason
+    - Tamara G. Houston
+  pubdate: 2012-07
+  journal: Journal of Atmospheric and Oceanic Technology
+  place: Volume 29, p897-910
+  doi: doi:10.1175/JTECH-D-11-00103.1
+  url: http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/papers/menne-etal2012.pdf
+  note: Canonical reference for GHCN-D dataset.
 
 DAIETAL1999:
   title: Effects of Clouds, Soil Moisture, Precipitation, and Water Vapor on Diurnal Temperature Range
@@ -54,12 +69,27 @@ DURREWALLACE2001:
   author:
     - Durre, Imke
     - Wallace, John M.
-  pubdate: 2001/08/01
+  pubdate: 2001-08-01
   doi: doi:10.1175/1520-0442(2001)014<3263:FITCSD>2.0.CO;2
   journal: Journal of Climate
   place: 14, 3263-3278
   url: http://dx.doi.org/10.1175/1520-0442(2001)014<3263:FITCSD>2.0.CO;2
   note: Uses daily data from US FSOD stations. 
+
+DURREETAL2010:
+  title: Comprehensive Automated Quality Assurance of Daily Surface Observations
+  author:
+    - Imke Durre
+    - Matthew J. Menne
+    - Byron E. Gleason
+    - Tamara G. Houston
+    - Russell S. Vose
+  pubdate: 2010-08
+  journal: Journal of applied meteorology and climatology
+  place: Volume 49, page 1615-1633
+  doi: doi:10.1175/2010JAMC2375.1
+  url: http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/papers/durre-menne-etal2010.pdf
+  note: QA procedures for GHCN-D.
 
 HANSENETAL1995:
   title: "Long-term changes of the diurnal temperature cycle: Implications about mechanisms of global climate change."
@@ -148,16 +178,6 @@ PETERSONETAL1997:
   url: http://journals.ametsoc.org/doi/pdf/10.1175/1520-0477%281997%29078%3C2145%3AISOAGS%3E2.0.CO%3B2
   doi: 10.1175/1520-0477(1997)078<2145:ISOAGS>2.0.CO;2
   notes: describe GSN?
-
-DURREWALLACE2001:
-  title: Factors Influencing the Cold-Season Diurnal Temperature Range in the United States
-  author:
-    - Imke Durre
-    - John M. Wallace
-  pubdate: 2001-08-01
-  journal: Journal of Climate
-  place: Volume 14, p3263-3278
-  note: probably worth reading.
 
 BUCHERDESSENS1991:
   title: Secular trend of surface temperature at an elevated observatory in the Pyrenees
