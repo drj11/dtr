@@ -80,9 +80,9 @@ Data Center.
 # Methods
 
 We use daily data from Global Climate Observing System Surface
-Network (GSN) stations that are in GHCN-D [MENNEETAL2012].  All
-data flagged by the GHCN-D automated quality assurance
-procedures [DURREETAL2010] are removed before processing.
+Network (GSN) [PETERSONETAL1997] stations that are in GHCN-D
+[MENNEETAL2012].  All data flagged by the GHCN-D automated quality
+assurance procedures [DURREETAL2010] are removed before processing.
 
 ## Paragraphs not yet placed
 
