@@ -1,3 +1,7 @@
+# references.yaml
+# Check syntax with:
+# python -c "import yaml;yaml.load(open('references.yaml'))"
+
 FLORA1920:
   title: Shading instrument shelters
   author: Flora, S. D.

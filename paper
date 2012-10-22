@@ -5,49 +5,90 @@
 We find that in many published studies
 the methods used to calculate diurnal temperature range (DTR)
 are not always specified (in particular
-for monthly averages of DTR), or are specified only implicitly.  In light
-of this, we study the differences that arise between two reasonable
-choices of method.  In this study, the methods lead to values for
-monthly average DTR that may differ by more than 2 K.  We find that for
-many stations the distribution of the differences is not symmetric and
-there is an average bias between the two methods.  This bias is present
-even when entire networks are considered.  Some stations may exhibit an
-artificial trend in monthly DTR that is due to choice of method.
+for monthly averages of DTR), or are specified only implicitly.
+In light of this, we study the differences that arise between two
+reasonable choices of method.  In this study, the methods lead to
+values for monthly average DTR that may differ by more than 2 K.
+We find that for many stations the distribution of the differences is
+not symmetric and there is an average bias between the two methods.
+This bias is present even when entire networks are considered.
+Some stations may exhibit an artificial trend in monthly DTR that
+is due to choice of method.
 
 # Intro
 
-Daily Temperature Range (DTR) is the range over which temperature varies during
-a day.  It is usually defined as $$ TMIN - TMAX $$ where TMIN is the minimum
-temperature in a day, and TMAX is the maximum temperature in a day.  In this study
-we are only concerned with measurements of land surface air temperatures.
+Daily Temperature Range (DTR) is the range over which temperature
+varies during a day.  It is usually defined as $$ TMIN - TMAX $$
+where TMIN is the minimum temperature in a day, and TMAX is the
+maximum temperature in a day.  In this study we are only concerned
+with measurements of land surface air temperatures.
 
-It is common in climate studies to use monthly averages of various climate
-elements.  For TMIN and TMAX the monthly average is usually made available
-in compilations of monthly climate data.  However, DTR is usually not (for
-example, it is not published in GHCN-M or USHCN [MENNEETAL2009].
+It is common in climate studies to use monthly averages of various
+climate elements.  For TMIN and TMAX the monthly average is usually
+made available in compilations of monthly climate data.  However,
+DTR is usually not (for example, it is not published in GHCN-M or
+USHCN [MENNEETAL2009]).
+
+Consider two methods for copmuting a monthly average for DTR:
+
+Method M.  Daily maximum temperature is averaged into a monthly TMAX;
+daily minimum temperature is averaged into a monthly TMIN.  Monthly DTR
+is then computed as TMAX-TMIN.
+
+Method D.  Each day's minimum temperature is subtracted from its
+maximum temperature to produce a daily DTR series.  The daily DTR
+series is then averaged into a monthly DTR.
+
+Note that it is easy to use Method M on collections of monthly data
+(such as GHCN-M, USHCN); this makes Method M attractive as
+monthly data is often easier to obtain and may have already been
+through a reasonable quality assurance process.  In contrast 
+Method D requires access to daily data; there is often more
+daily data, but it can be harder to access, there may be
+unreasonable volumes of it, and it may only have had no, or only
+minimal, quality checks applied.
+
+In an observing network it is desirable to compile monthly
+averages from a complete set of days.  Inevitably however, there
+may be some days where an element is not reported.  Clearly when
+there are no missing days in a particular month, then Method M
+and Method D will compute the same value for the monthly average
+DTR.  However, if there are days when TMIN is reported but TMAX
+is not (or vice versa) then the two methods may compute
+different values.
+
+To illustrate the effect, see figure [XX work/b19401.png], a plot
+of TMAX and TMIN for GHCN-D station USW00026615 year 1949, month
+January (after flagged data have been removed).  Circles mark days
+where TMAX is valid and TMIN is not valid (4 days), and days where
+TMIN is valid and TMAX is not valid (3 days).  For each series the
+missing days are isolated, so would still pass the WMO 3/5 rule.
+It so happens that in this month the days when TMIN is valid but
+TMAX is not are cold, and the days when TMAX is valid but TMIN is
+not are warm.  The difference in the result of the two different
+methods for calculating DTR is 2.4 ℃.
+
+In practice we find studies use monthly data when assessing DTR:
+[KARLETAL1993] uses monthly data; [BRAGANZAETAL2004] uses monthly data;
+[VOSEETAL2005] uses monthly data.  [DAIETAL1999] uses a mixture of daily
+and monthly data (but when considering monthly averages, appears to use
+Method M).  Clearly when the data has already been compiled into monthly
+averages, only Method M can be used. [DURREWALLACE2001] uses daily data,
+the Summary of the Day First Order (FSOD) from the National Climatic
+Data Center.
+
+# Methods
+
+We use daily data from Global Climate Observing System Surface
+Network (GSN) stations that are in GHCN-D [MENNEETAL2012].  All
+data flagged by the GHCN-D automated quality assurance
+procedures [DURREETAL2010] are removed before processing.
 
 ## Paragraphs not yet placed
 
 [KARLETAL1993] suggest that it may be worth considering more precise
 technique to calculate DTR (on p1017).
 
-Method M.  Daily maximum temperature is averaged into a monthly TMAX;
-daily minimum temperature is averaged into a monthly TMIN.  Monthly DTR
-is then computed as TMAX-TMIN.  Note that it is easy to use Method M on
-collections of monthly data (such as GHCN-M, USHCN).
-
-Method D.  Each day's minimum temperature is subtracted from its maximum
-temperature to produce a daily DTR series.  The daily DTR series is then
-averaged into a monthly DTR.  Note that Method D requires that reasonable
-quality daily data be available.
-
-[KARLETAL1993] uses monthly data; [BRAGANZAETAL2004] uses monthly data;
-[VOSEETAL2005] uses monthly data.  [DAIETAL1999] uses a mixture of daily
-and monthly data (but when considering monthly averages, appears to use
-Method M).  Clearly when the data has already been compiled into monthly
-averages, only Method M can be used. [DURREWALLACE2001] uses daily data,
-the Summary of the Day First Order (FSOD) from the
-National Climatic Data Center.
 
 When averaging daily (temperature) values into monthly values, it is
 usual to apply some sort of completeness check.  The ideal situation
@@ -68,16 +109,6 @@ this analysis.  Brief visual checks of all the stations (temperatures
 and anomalies for both TMIN and TMAX) were made; no further stations
 were discarded.
 
-To illustrate the effect, see figure [XX work/b19401.png], a plot of
-TMAX and TMIN for GHCN-D station USW00026615 year 1949, month January.
-Circles mark days where TMAX is valid and TMIN is not valid (4 days), and
-days where TMIN is valid and TMAX is not valid (3 days).  For each series
-the missing days are isolated, so would still pass the WMO 3/5 rule.
-It so happens that in this month the days when TMIN is valid but TMAX is
-not are cold, and the days when TMAX is valid but TMIN is not are warm.
-The difference in the result of the two different methods for calculating
-Daily Range is 2.4 ℃.
-
 While more workers may be choosing to do analyses with daily
 data series, it is still the case that due to their simplicitly,
 availability, and manageability, some workers may prefer working
@@ -85,4 +116,4 @@ with monthly data series.  We urge compilers of monthly data series
 to publish (quality controlled) monthly averages of DTR.  This is
 the simplest way that workers can avoid the hazard of using TEXS.
 Datasets that are compiled primarily from underlying daily data
-(USHCN GHCNM) should be able to do this most easily.
+(USHCN GHCN-M) should be able to do this most easily.
