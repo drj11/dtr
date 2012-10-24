@@ -13,11 +13,14 @@ ghcnd.station.element <- function(station, element) {
 
 ghcnm.station <-
 function(station, file='work/dmet.ghcnv3') {
+  # Extract all rows for a particular station from
+  # a GHCN-M v3 file.
   s <- GHCNM(file=file)
   s <- s[s[, 1]==station, ]
   return(s)
 }
 GHCNM <- function(file='work/dmet.ghcnv3') {
+  # Extract all rows from a GHCN-M v3 file.
   # :todo: Why does the as.is not work?
   s <- read.fwf(file, c(11, 4, 4, rep(c(5, 3), 12)),
     as.is=rep(5, 27, 2), sep='!', strip.white=FALSE)
@@ -26,6 +29,8 @@ GHCNM <- function(file='work/dmet.ghcnv3') {
   
 ghcnm.station.element <-
 function(station, element, file='work/dmet.ghcnv3') {
+  # Extract all rows for a particular station,element
+  # combination from a GHCN-M v3 file.
   s <- ghcnm.station(station, file=file)
   s <- s[s[, 3]==element, ]
   return(s)
@@ -265,6 +270,27 @@ PlotZeroes <- function(df) {
   r <- range(df[, 2])
   plot(r[1]:r[2], rowSums(m==0, na.rm=TRUE),
     ylab='zero count', xlab='year', main=paste('GHCN-D', uid))
+}
+
+
+PlotSingleMonth <- function(stationid, year, month) {
+  # Plot TMIN and TMAX for a single month at a single station
+  tminall <- GHCNDStation(stationid, 'TMIN')
+  tmaxall <- GHCNDStation(stationid, 'TMAX')
+  tmin = YM(tminall, year, month)
+  tmax = YM(tmaxall, year, month)
+  # 1 where min exists and max doesn't.
+  minpoints = (!is.na(tmin)) * is.na(tmax)
+  minpoints[minpoints == 0] <- NA
+  # 1 where max exists and min doesn't.
+  maxpoints = (!is.na(tmax)) * is.na(tmin)
+  maxpoints[maxpoints == 0] <- NA
+  plot(x=rep(1:length(tmin),2), y=c(tmin,tmax), pch=c(minpoints,maxpoints),
+    xlab='day', ylab='temperature, ℃',
+    main=paste('GHCN-D', stationid, sprintf('%04d-%02d', year, month), 'TMAX,TMIN'),
+    ylim=range(tmax, tmin, na.rm=TRUE))
+  lines(ts(tmax), col='red')
+  lines(ts(tmin), col='blue')
 }
 
 # source('ghcnd.R')
