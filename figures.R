@@ -57,23 +57,5 @@ dev.off()
 png("work/b194901.png")
 # Plot TMIN and TMAX for station USW00026615 1949-01
 source('ghcn.R')
-stationid <- 'USW00026615'
-year <- 1949
-month <- 1
-tminall <- GHCNDStation(stationid, 'TMIN')
-tmaxall <- GHCNDStation(stationid, 'TMAX')
-tmin = YM(tminall, year, month)
-tmax = YM(tmaxall, year, month)
-# 1 where min exists and max doesn't.
-minpoints = (!is.na(tmin)) * is.na(tmax)
-minpoints[minpoints == 0] <- NA
-# 1 where max exists and min doesn't.
-maxpoints = (!is.na(tmax)) * is.na(tmin)
-maxpoints[maxpoints == 0] <- NA
-plot(x=rep(1:length(tmin),2), y=c(tmin,tmax), pch=c(minpoints,maxpoints),
-  xlab='day', ylab='temperature, ℃',
-  main=paste('GHCN-D', stationid, sprintf('%04d-%02d', year, month), 'TMAX,TMIN'),
-  ylim=range(tmax, tmin, na.rm=TRUE))
-lines(ts(tmax), col='red')
-lines(ts(tmin), col='blue')
+PlotSingleMonth('USW00026615', 1949, 1)
 dev.off()
