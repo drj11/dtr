@@ -1,15 +1,21 @@
 #!/usr/bin/env python
 
-"""Script to assess whether a data series has been quantised (more coarsely than the 0.1C precision).
+"""Script to assess whether a data series has been quantised (more
+coarsely than the 0.1C precision).
 
 The basic idea is:
-take first differences of a daily series, and then fit to a n*k model (where n is an integer),
-in Hough transform style.  In detail, let d be the first difference.  Add 1 to the point
-(n, k) for all integer n and k > 1 and such that n*k = d.  Any k with lots of score is
-the quantisation amount.
+take first differences of a daily series, and then fit to a n*k
+model (where n is an integer), in Hough transform style.  In detail,
+let d be the first difference.  Add 1 to the point (n, k) for all
+integer n and k > 1 and such that n*k = d.  Any k with lots of
+score is the quantisation amount.
 
-We could test each count[k] using R's binom.test (the probably of "success" for a candidate
+We could test each count[k] using R's binom.test (the probably of
+"success" for a candidate
 quantisation amount is 1/k).
+
+Many stations show quantisation to degrees Fahrenheit, 0.5 C,
+1.0 C.  Also, check out the quantisation of SNWD at SZ000002220.
 
 """
 
