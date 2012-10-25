@@ -59,3 +59,25 @@ png("work/b194901.png")
 source('ghcn.R')
 PlotSingleMonth('USW00026615', 1949, 1)
 dev.off()
+
+png("work/s200502.png")
+require('ggplot2')
+# Example using ggplot staircase.
+GGPlotSingleMonth <- function(stationid, year, month) {
+  # Plot TMIN and TMAX for a single month at a single station
+  tminall <- GHCNDStation(stationid, 'TMIN')
+  tmaxall <- GHCNDStation(stationid, 'TMAX')
+  tmin = YM(tminall, year, month)
+  tmax = YM(tmaxall, year, month)
+  # 1 where min exists and max doesn't.
+  minpoints = (!is.na(tmin)) * is.na(tmax)
+  minpoints[minpoints == 0] <- NA
+  # 1 where max exists and min doesn't.
+  maxpoints = (!is.na(tmax)) * is.na(tmin)
+  maxpoints[maxpoints == 0] <- NA
+  ggplot(data.frame(day=1:length(tmax),tmax=tmax), aes(x=day, y=tmax, colour='blue')) + geom_step() +
+    geom_step(data=data.frame(day=1:length(tmin),tmin=tmin), aes(x=day, y=tmin, colour='red'))
+}
+GGPlotSingleMonth('SZ000002220', 2005, 2)
+dev.off()
+
