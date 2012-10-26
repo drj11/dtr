@@ -151,6 +151,8 @@ GHCNDStationT <- function(station, rm.flag=TRUE) {
   tmax = rows[rows[, 4] == 'TMAX', ]
   tmin = AsSingle(tmin, yearly.range, rm.flag=rm.flag)
   tmax = AsSingle(tmax, yearly.range, rm.flag=rm.flag)
+  tmin <- tmin * 0.1
+  tmax <- tmax * 0.1
   df = data.frame(tmin=tmin, tmax=tmax)
   res <- list(uid=station, baseyear=yearly.range[1], lastyear=yearly.range[2], rows=rows, data=df)
   return(res)
@@ -328,7 +330,7 @@ TStep <- function(sl) {
   maxpoints[maxpoints == 0] <- NA
   ggplot(df) + geom_step(aes(x=day, y=tmax, colour='tmax')) +
     geom_step(aes(x=day, y=tmin, colour='tmin')) +
-    labs(title=paste('GHCN-D', sl$uid), colour='element', y='temperature')
+    labs(title=paste('GHCN-D', sl$uid), colour='element', y='temperature, ℃')
 }
 
 # source('ghcnd.R')
