@@ -293,6 +293,26 @@ PlotSingleMonth <- function(stationid, year, month) {
   lines(ts(tmin), col='blue')
 }
 
+StationSingleMonth <- function(stationid, year, month) {
+  tminall <- GHCNDStation(stationid, 'TMIN')
+  tmaxall <- GHCNDStation(stationid, 'TMAX')
+  tmin = YM(tminall, year, month)
+  tmax = YM(tmaxall, year, month)
+  # :todo: the data should be a data frame with columns tmin and tmax.
+  return(list(uid=stationid, firstday=sprintf('%04d-%02d-%02d', year, month, 1), element=c('TMIN', 'TMAX'),
+    tmin=tmin, tmax=tmax))
+}
+GGPlotSingleMonth <- function(sl) {
+  # TRUE where min exists and max doesn't.
+  minpoints = (!is.na(sl$tmin)) & is.na(sl$tmax)
+  minpoints[minpoints == 0] <- NA
+  # STRUE where max exists and min doesn't.
+  maxpoints = (!is.na(sl$tmax)) & is.na(sl$tmin)
+  maxpoints[maxpoints == 0] <- NA
+  ggplot(data.frame(day=1:length(sl$tmax),tmax=sl$tmax), aes(x=day, y=tmax, colour='blue')) + geom_step() +
+    geom_step(data=data.frame(day=1:length(sl$tmin),tmin=sl$tmin), aes(x=day, y=tmin, colour='red'))
+}
+
 # source('ghcnd.R')
 # s <- ghcnd.station.element('UK000003808', 'TMIN')
 # e <- ghcnd.station.element.as.single('UK000003808', 'TMIN')
