@@ -132,12 +132,6 @@ MonthlyIndex <- function(base) {
   })
 }
 
-ghcnd.station.element.as.single <- function(station, element) {
-  # A station's entire daily record for a single element
-  s <- ghcnd.station.element(station, element)
-  return(AsSingle(s))
-}
-
 GHCNDStation <- function(station, element) {
   # Return a station as a list object.
   s <- ghcnd.station.element(station, element)
@@ -149,6 +143,19 @@ GHCNDStation <- function(station, element) {
   res <- list(uid=station, df=s, baseyear=r[1], lastyear=r[2], element=element, series=d)
   return(res)
 }
+
+GHCNDStationT <- function(station) {
+  rows <- ghcnd.station(station)
+  yearly.range <- range(rows[, 2])
+  tmin = rows[rows[, 4] == 'TMIN', ]
+  tmax = rows[rows[, 4] == 'TMAX', ]
+  tmin = AsSingle(tmin, yearly.range)
+  tmax = AsSingle(tmax, yearly.range)
+  df = data.frame(tmin=tmin, tmax=tmax)
+  res <- list(uid=station, baseyear=yearly.range[1], lastyear=yearly.range[2], rows=rows, data=df)
+  return(res)
+}
+
 YM <- function(sl, year, month) {
   # Extract a single month from a (daily) station.
 
@@ -171,14 +178,19 @@ kMonthLength <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 kYearMask <- floor(((seq(1, 31*12)-1)%%31)+1) <=
              kMonthLength[ceiling(seq(1, 31*12)/31)]
 
-AsSingle <- function(s) {
+AsSingle <- function(s, yearly.range=NA) {
   # Returns daily data as a single vector.
   #
   # Args:
   #   s: a station object returned from ghcnd.station.element or friends.
+  #   yearly.range: if supplied (as a length 2 vector), stretch the result
+  #     out to include all of the specified years (padded with NA).  Note
+  #     that it can only be used to stretch, not shrink.
   # Returns:
   #  Daily data.
-  yearly.range <- range(s[, 2])
+  if (length(yearly.range) < 2) {
+    yearly.range <- range(s[, 2])
+  }
   # Number of years
   n <- yearly.range[2] - yearly.range[1] + 1
   baseyear <- yearly.range[1]
@@ -300,20 +312,21 @@ StationSingleMonth <- function(stationid, year, month) {
   tmax = YM(tmaxall, year, month)
   # :todo: the data should be a data frame with columns tmin and tmax.
   return(list(uid=stationid, firstday=sprintf('%04d-%02d-%02d', year, month, 1), element=c('TMIN', 'TMAX'),
-    tmin=tmin, tmax=tmax))
+    data=data.frame(tmin=tmin, tmax=tmax)))
 }
-GGPlotSingleMonth <- function(sl) {
+TStep <- function(sl) {
+  # Plot TMIN and TMAX as a staircase.
+  df <- data.frame(sl$data, day=1:length(sl$data[,1]))
   # TRUE where min exists and max doesn't.
-  minpoints = (!is.na(sl$tmin)) & is.na(sl$tmax)
+  minpoints = (!is.na(df$tmin)) & is.na(df$tmax)
   minpoints[minpoints == 0] <- NA
-  # STRUE where max exists and min doesn't.
-  maxpoints = (!is.na(sl$tmax)) & is.na(sl$tmin)
+  # TRUE where max exists and min doesn't.
+  maxpoints = (!is.na(df$tmax)) & is.na(df$tmin)
   maxpoints[maxpoints == 0] <- NA
-  ggplot(data.frame(day=1:length(sl$tmax),tmax=sl$tmax), aes(x=day, y=tmax, colour='blue')) + geom_step() +
-    geom_step(data=data.frame(day=1:length(sl$tmin),tmin=sl$tmin), aes(x=day, y=tmin, colour='red'))
+  ggplot(df) + geom_step(aes(x=day, y=tmax, colour='blue')) +
+    geom_step(aes(x=day, y=tmin, colour='red'))
 }
 
 # source('ghcnd.R')
 # s <- ghcnd.station.element('UK000003808', 'TMIN')
-# e <- ghcnd.station.element.as.single('UK000003808', 'TMIN')
 # m <- ghcnm.station.element('UK000003808', 'MDTR')
