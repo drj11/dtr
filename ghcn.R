@@ -144,13 +144,13 @@ GHCNDStation <- function(station, element) {
   return(res)
 }
 
-GHCNDStationT <- function(station) {
+GHCNDStationT <- function(station, rm.flag=TRUE) {
   rows <- ghcnd.station(station)
   yearly.range <- range(rows[, 2])
   tmin = rows[rows[, 4] == 'TMIN', ]
   tmax = rows[rows[, 4] == 'TMAX', ]
-  tmin = AsSingle(tmin, yearly.range)
-  tmax = AsSingle(tmax, yearly.range)
+  tmin = AsSingle(tmin, yearly.range, rm.flag=rm.flag)
+  tmax = AsSingle(tmax, yearly.range, rm.flag=rm.flag)
   df = data.frame(tmin=tmin, tmax=tmax)
   res <- list(uid=station, baseyear=yearly.range[1], lastyear=yearly.range[2], rows=rows, data=df)
   return(res)
@@ -178,7 +178,7 @@ kMonthLength <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 kYearMask <- floor(((seq(1, 31*12)-1)%%31)+1) <=
              kMonthLength[ceiling(seq(1, 31*12)/31)]
 
-AsSingle <- function(s, yearly.range=NA) {
+AsSingle <- function(s, yearly.range=NA, rm.flag=TRUE) {
   # Returns daily data as a single vector.
   #
   # Args:
@@ -186,6 +186,7 @@ AsSingle <- function(s, yearly.range=NA) {
   #   yearly.range: if supplied (as a length 2 vector), stretch the result
   #     out to include all of the specified years (padded with NA).  Note
   #     that it can only be used to stretch, not shrink.
+  #   rm.flag: If TRUE then flagged data is removed (set to NA).
   # Returns:
   #  Daily data.
   if (length(yearly.range) < 2) {
@@ -205,7 +206,9 @@ AsSingle <- function(s, yearly.range=NA) {
   flags <- rep(NA, n*31*12)
   flags[d] <- as.matrix(s[, seq(6, 66, 2)])
   # Remove all data that is flagged in any way.
-  res[substr(flags, 2, 2) != " "] <- NA
+  if (rm.flag) {
+    res[substr(flags, 2, 2) != " "] <- NA
+  }
 
   # And remove data with the MISSING value.
   res[res==-9999] <- NA
@@ -323,8 +326,9 @@ TStep <- function(sl) {
   # TRUE where max exists and min doesn't.
   maxpoints = (!is.na(df$tmax)) & is.na(df$tmin)
   maxpoints[maxpoints == 0] <- NA
-  ggplot(df) + geom_step(aes(x=day, y=tmax, colour='blue')) +
-    geom_step(aes(x=day, y=tmin, colour='red'))
+  ggplot(df) + geom_step(aes(x=day, y=tmax, colour='tmax')) +
+    geom_step(aes(x=day, y=tmin, colour='tmin')) +
+    labs(title=paste('GHCN-D', sl$uid), colour='element', y='temperature')
 }
 
 # source('ghcnd.R')
