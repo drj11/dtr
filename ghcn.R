@@ -199,28 +199,6 @@ SingleMonth <- function(sl, year, month) {
   return(res)
 }
 
-StationSingleMonth <- function(stationid, year, month) {
-  tminall <- GHCNDStation(stationid, 'TMIN')
-  tmaxall <- GHCNDStation(stationid, 'TMAX')
-  tmin = YM(tminall, year, month)
-  tmax = YM(tmaxall, year, month)
-  # :todo: the data should be a data frame with columns tmin and tmax.
-  return(list(uid=stationid, first=c(year, month, 1), element=c('TMIN', 'TMAX'),
-    data=data.frame(tmin=tmin, tmax=tmax)))
-}
-
-YM <- function(sl, year, month) {
-  # Extract a single month from a (daily) station.
-
-  # Number of days between Jan 1 and start of month.
-  moff = sum(kMonthLength[0:(month-1)])
-  # Number of days between start of series and start of year.
-  yoff = 365 * (year - sl$baseyear)
-  p = yoff + moff + 1
-  q = yoff + moff + kMonthLength[month]
-  return(sl$series[p:q])
-}
-
 # Number of days in month for non-leap year.
 kMonthLength <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
@@ -343,10 +321,9 @@ PlotZeroes <- function(df) {
 
 PlotSingleMonth <- function(stationid, year, month) {
   # Plot TMIN and TMAX for a single month at a single station
-  tminall <- GHCNDStation(stationid, 'TMIN')
-  tmaxall <- GHCNDStation(stationid, 'TMAX')
-  tmin = YM(tminall, year, month)
-  tmax = YM(tmaxall, year, month)
+  sl <- SingleMonth(GHCNDStationT(stationid), year, month)
+  tmin <- sl$data$tmin
+  tmax <- sl$data$tmax
   # 1 where min exists and max doesn't.
   minpoints = (!is.na(tmin)) * is.na(tmax)
   minpoints[minpoints == 0] <- NA
