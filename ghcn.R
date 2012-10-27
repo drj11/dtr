@@ -164,8 +164,36 @@ GHCNDStationT <- function(station='', rm.flag=TRUE, filename='') {
   tmin <- tmin * 0.1
   tmax <- tmax * 0.1
   df = data.frame(tmin=tmin, tmax=tmax)
-  res <- list(uid=station, baseyear=yearly.range[1], lastyear=yearly.range[2], rows=rows, data=df)
+  uid <- unique(rows[, 1])
+  res <- list(uid=uid, first=c(yearly.range[1], 1, 1),
+    element=c('TMIN', 'TMAX'),
+    baseyear=yearly.range[1], lastyear=yearly.range[2], rows=rows, data=df)
   return(res)
+}
+SingleYear <- function(sl, year) {
+  # Extract a single year from the station list sl, returning a new list.
+  if (sl$first[2] != 1 || sl$first[3] != 1) {
+    return(NA)
+  }
+  n = year - sl$first[1]
+  if (n < 0) {
+    return(NA)
+  }
+  df <- sl$data[(n*365+1):(n*365+365), ]
+  res <- list(uid=sl$uid, first=c(year, 1, 1),
+    element=c('TMIN', 'TMAX'),
+    data=df)
+  return(res)
+}
+
+StationSingleMonth <- function(stationid, year, month) {
+  tminall <- GHCNDStation(stationid, 'TMIN')
+  tmaxall <- GHCNDStation(stationid, 'TMAX')
+  tmin = YM(tminall, year, month)
+  tmax = YM(tmaxall, year, month)
+  # :todo: the data should be a data frame with columns tmin and tmax.
+  return(list(uid=stationid, first=c(year, month, 1), element=c('TMIN', 'TMAX'),
+    data=data.frame(tmin=tmin, tmax=tmax)))
 }
 
 YM <- function(sl, year, month) {
@@ -319,16 +347,6 @@ PlotSingleMonth <- function(stationid, year, month) {
   lines(ts(tmax), col='red')
   lines(ts(tmin), col='blue')
 }
-
-StationSingleMonth <- function(stationid, year, month) {
-  tminall <- GHCNDStation(stationid, 'TMIN')
-  tmaxall <- GHCNDStation(stationid, 'TMAX')
-  tmin = YM(tminall, year, month)
-  tmax = YM(tmaxall, year, month)
-  # :todo: the data should be a data frame with columns tmin and tmax.
-  return(list(uid=stationid, firstday=sprintf('%04d-%02d-%02d', year, month, 1), element=c('TMIN', 'TMAX'),
-    data=data.frame(tmin=tmin, tmax=tmax)))
-}
 TStep <- function(sl) {
   # Plot TMIN and TMAX as a staircase.
   df <- data.frame(sl$data, day=1:length(sl$data[,1]))
@@ -338,9 +356,10 @@ TStep <- function(sl) {
   # TRUE where max exists and min doesn't.
   maxpoints = (!is.na(df$tmax)) & is.na(df$tmin)
   maxpoints[maxpoints == 0] <- NA
+  isodate <- sprintf('%04d-%02d-%02d', sl$first[1], sl$first[2], sl$first[3])
   ggplot(df) + geom_step(aes(x=day, y=tmax, colour='tmax')) +
     geom_step(aes(x=day, y=tmin, colour='tmin')) +
-    labs(title=paste('GHCN-D', sl$uid), colour='element', y='temperature, ℃')
+    labs(title=paste('GHCN-D', sl$uid, isodate), colour='element', y='temperature, ℃')
 }
 
 # source('ghcnd.R')
