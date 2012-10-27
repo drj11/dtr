@@ -1,6 +1,7 @@
 ## Notes about the actual investigation
 
-SZ000002220 TMAX 2005-02-12/13 suspect (looks like a missing MINUS sign).
+SZ000002220 TMAX 2005-02-12/13 suspect (looks like a missing MINUS sign).  (2012-10-27: drj: stands.  A plot with
+TMIN suggests that negating the value would be implausible).
 
 Not very many stations near the equator.
 
@@ -19,6 +20,12 @@ temperature.
 Idea: map where circle size and colour gives the average value of
 DMET.  And where elevation is indicated by height of stick (a la
 Elite).
+
+It is not at all uncommon for data to fail the TMIN/TMAX GHCN-D
+internal consistency check (eg SZ000002220 1950-12-15/16).  Could it
+be that the min and max values are taken from 24 hourly samples?
+If we use 24 samples instead of 25 (that is, no overlap in samples
+across adjacent days) then that could explain the data.
 
 A few DMETs are above 200 in magnitude.  EG USW00026615 1949-01
 
