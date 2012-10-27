@@ -1,15 +1,3 @@
-# Example: ghcnd.station('WF000917530')
-ghcnd.station <- function(station) {
-  filename <- paste('data/ghcnd_gsn/', station, '.dly', sep='')
-  s <- read.fwf(filename, c(11, 4, 2, 4, rep(c(5, 3), 31)),
-    as.is=rep(6, 66, 2), sep='!', strip.white=FALSE)
-  return(s)
-}
-ghcnd.station.element <- function(station, element) {
-  s <- ghcnd.station(station)
-  s <- s[s[, 4]==element, ]
-  return(s)
-}
 
 ghcnm.station <-
 function(station, file='work/dmet.ghcnv3') {
@@ -100,6 +88,28 @@ ExpandDays <- function(m) {
   #   A vector; always 31 elements long.
   return((m*31-30):(m*31))
 }
+# Example: ghcnd.station('WF000917530')
+ghcnd.station <- function(station='', dirname='data/ghcnd_gsn', filename='') {
+  # Return the rows of a GHCN-D format file.
+  #
+  # Args:
+  #   station: If supplied, specifies the filename to open, in combination
+  #     with the dirname argument.
+  #   dirname: Specifies the directory of files to use when the station
+  #     argument is used.
+  #   filename: The filename to open (if station argument is not supplied)
+  if (station != '') {
+    filename <- paste(dirname, '/', station, '.dly', sep='')
+  }
+  s <- read.fwf(filename, c(11, 4, 2, 4, rep(c(5, 3), 31)),
+    as.is=rep(6, 66, 2), sep='!', strip.white=FALSE)
+  return(s)
+}
+ghcnd.station.element <- function(station, element) {
+  s <- ghcnd.station(station)
+  s <- s[s[, 4]==element, ]
+  return(s)
+}
 ghcnd.station.element.year <- function(station, element, year) {
   # A single year's worth of data.
   #
@@ -144,8 +154,8 @@ GHCNDStation <- function(station, element) {
   return(res)
 }
 
-GHCNDStationT <- function(station, rm.flag=TRUE) {
-  rows <- ghcnd.station(station)
+GHCNDStationT <- function(station='', rm.flag=TRUE, filename='') {
+  rows <- ghcnd.station(station=station, filename=filename)
   yearly.range <- range(rows[, 2])
   tmin = rows[rows[, 4] == 'TMIN', ]
   tmax = rows[rows[, 4] == 'TMAX', ]
