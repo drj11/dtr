@@ -63,6 +63,6 @@ dev.off()
 png("work/s200502.png")
 require('ggplot2')
 # Example using ggplot staircase.
-GGPlotSingleMonth(StationSingleMonth('SZ000002220', 2005, 2))
+TStep(StationSingleMonth('SZ000002220', 2005, 2))
 dev.off()
 
