@@ -157,13 +157,13 @@ GHCNDStation <- function(station, element) {
 GHCNDStationT <- function(station='', rm.flag=TRUE, filename='') {
   rows <- ghcnd.station(station=station, filename=filename)
   yearly.range <- range(rows[, 2])
-  tmin = rows[rows[, 4] == 'TMIN', ]
-  tmax = rows[rows[, 4] == 'TMAX', ]
-  tmin = AsSingle(tmin, yearly.range, rm.flag=rm.flag)
-  tmax = AsSingle(tmax, yearly.range, rm.flag=rm.flag)
+  tmin <- rows[rows[, 4] == 'TMIN', ]
+  tmax <- rows[rows[, 4] == 'TMAX', ]
+  tmin <- AsSingle(tmin, yearly.range, rm.flag=rm.flag)
+  tmax <- AsSingle(tmax, yearly.range, rm.flag=rm.flag)
   tmin <- tmin * 0.1
   tmax <- tmax * 0.1
-  df = data.frame(tmin=tmin, tmax=tmax)
+  df <- data.frame(tmin=tmin, tmax=tmax)
   uid <- unique(rows[, 1])
   res <- list(uid=uid, first=c(yearly.range[1], 1, 1),
     element=c('TMIN', 'TMAX'),
@@ -181,8 +181,21 @@ SingleYear <- function(sl, year) {
   }
   df <- sl$data[(n*365+1):(n*365+365), ]
   res <- list(uid=sl$uid, first=c(year, 1, 1),
-    element=c('TMIN', 'TMAX'),
-    data=df)
+    element=sl$element, data=df)
+  return(res)
+}
+SingleMonth <- function(sl, year, month) {
+  # Extract a single month from the station, returning a new list.
+
+  sl <- SingleYear(sl, year)
+  # Number of days between Jan 1 and start of month.
+  moff <- sum(kMonthLength[0:(month-1)])
+  p <- moff + 1
+  q <- moff + kMonthLength[month]
+  df <- sl$data[p:q, ]
+  
+  res <- list(uid=sl$uid, first=c(year, month, 1),
+    element=sl$element, data=df)
   return(res)
 }
 
