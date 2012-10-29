@@ -145,24 +145,24 @@ MonthlyIndex <- function(base) {
 GHCNDStation <- function(station, element) {
   # Return a station as a list object.
   s <- ghcnd.station.element(station, element)
-  d <- AsSingle(s)
+  l <- AsList(s)
   if (is.element(element, c('TMIN', 'TMAX', 'MDTR'))) {
-    d <- d * 0.1
+    l$data <- l$data * 0.1
   }
   r <- range(s[, 2])
-  res <- list(uid=station, df=s, baseyear=r[1], lastyear=r[2], element=element, series=d)
+  res <- list(uid=station, df=s, baseyear=r[1], lastyear=r[2], element=element, series=l)
   return(res)
 }
 
-GHCNDStationT <- function(station='', rm.flag=TRUE, filename='') {
+GHCNDStationT <- function(station='', filename='') {
   rows <- ghcnd.station(station=station, filename=filename)
   yearly.range <- range(rows[, 2])
   tmin <- rows[rows[, 4] == 'TMIN', ]
   tmax <- rows[rows[, 4] == 'TMAX', ]
-  tmin <- AsSingle(tmin, yearly.range, rm.flag=rm.flag)
-  tmax <- AsSingle(tmax, yearly.range, rm.flag=rm.flag)
-  tmin <- tmin * 0.1
-  tmax <- tmax * 0.1
+  tmin <- AsList(tmin, yearly.range)
+  tmax <- AsList(tmax, yearly.range)
+  tmin$data <- tmin$data * 0.1
+  tmax$data <- tmax$data * 0.1
   df <- data.frame(tmin=tmin, tmax=tmax)
   uid <- unique(rows[, 1])
   res <- list(uid=uid, first=c(yearly.range[1], 1, 1),
@@ -209,8 +209,9 @@ kMonthLength <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 kYearMask <- floor(((seq(1, 31*12)-1)%%31)+1) <=
              kMonthLength[ceiling(seq(1, 31*12)/31)]
 
-AsSingle <- function(s, yearly.range=NA, rm.flag=TRUE) {
-  # Returns daily data as a single vector.
+AsList <- function(s, yearly.range=NA) {
+  # Returns daily data as a list of 2 vectors (one for values,
+  # one for flags).
   #
   # Args:
   #   s: a station object returned from ghcnd.station.element or friends.
@@ -220,6 +221,7 @@ AsSingle <- function(s, yearly.range=NA, rm.flag=TRUE) {
   #   rm.flag: If TRUE then flagged data is removed (set to NA).
   # Returns:
   #  Daily data.
+  rm.flag <- FALSE
   if (length(yearly.range) < 2) {
     yearly.range <- range(s[, 2])
   }
@@ -231,23 +233,24 @@ AsSingle <- function(s, yearly.range=NA, rm.flag=TRUE) {
   i <- as.numeric(Map(mi, s[, 2], s[, 3]))
   # Convert to daily index (two dimensional)
   d <- as.numeric(do.call(rbind, Map(ExpandDays, i)))
-  res <- rep(NA, n*31*12)
-  res[d] <- do.call(cbind, s[, seq(5, 66, 2)])
+  val <- rep(NA, n*31*12)
+  val[d] <- do.call(cbind, s[, seq(5, 66, 2)])
 
   flags <- rep(NA, n*31*12)
   flags[d] <- as.matrix(s[, seq(6, 66, 2)])
   # Remove all data that is flagged in any way.
   if (rm.flag) {
-    res[substr(flags, 2, 2) != " "] <- NA
+    val[substr(flags, 2, 2) != " "] <- NA
   }
 
   # And remove data with the MISSING value.
-  res[res==-9999] <- NA
+  val[val==-9999] <- NA
 
   # Compress by converting from pretend year (see above) to
   # real years.  Removes Feb 29 too.
-  res <- res[which(rep(kYearMask, n))]
-  return(res)
+  val <- val[which(rep(kYearMask, n))]
+  flags <- flags[which(rep(kYearMask, n))]
+  return(list(data=val, flag=flags))
 }
 DailyAnomalies <- function(s) {
   # Compute daily anomalies (by subtracting from each element the
@@ -322,8 +325,8 @@ PlotZeroes <- function(df) {
 PlotSingleMonth <- function(stationid, year, month) {
   # Plot TMIN and TMAX for a single month at a single station
   sl <- SingleMonth(GHCNDStationT(stationid), year, month)
-  tmin <- sl$data$tmin
-  tmax <- sl$data$tmax
+  tmin <- sl$data$tmin.data
+  tmax <- sl$data$tmax.data
   # 1 where min exists and max doesn't.
   minpoints = (!is.na(tmin)) * is.na(tmax)
   minpoints[minpoints == 0] <- NA
@@ -341,14 +344,14 @@ TStep <- function(sl) {
   # Plot TMIN and TMAX as a staircase.
   df <- data.frame(sl$data, day=1:length(sl$data[,1]))
   # TRUE where min exists and max doesn't.
-  minpoints = (!is.na(df$tmin)) & is.na(df$tmax)
-  minpoints[minpoints == 0] <- NA
+  # minpoints = (!is.na(df$tmin)) & is.na(df$tmax)
+  # minpoints[minpoints == 0] <- NA
   # TRUE where max exists and min doesn't.
-  maxpoints = (!is.na(df$tmax)) & is.na(df$tmin)
-  maxpoints[maxpoints == 0] <- NA
+  # maxpoints = (!is.na(df$tmax)) & is.na(df$tmin)
+  # maxpoints[maxpoints == 0] <- NA
   isodate <- sprintf('%04d-%02d-%02d', sl$first[1], sl$first[2], sl$first[3])
-  ggplot(df) + geom_step(aes(x=day, y=tmax, colour='tmax')) +
-    geom_step(aes(x=day, y=tmin, colour='tmin')) +
+  ggplot(df) + geom_step(aes(x=day, y=tmax.data, colour='tmax')) +
+    geom_step(aes(x=day, y=tmin.data, colour='tmin')) +
     labs(title=paste('GHCN-D', sl$uid, isodate), colour='element', y='temperature, ℃')
 }
 
