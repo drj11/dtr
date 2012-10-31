@@ -350,7 +350,13 @@ TStep <- function(sl) {
   # maxpoints = (!is.na(df$tmax)) & is.na(df$tmin)
   # maxpoints[maxpoints == 0] <- NA
   isodate <- sprintf('%04d-%02d-%02d', sl$first[1], sl$first[2], sl$first[3])
-  ggplot(df) + geom_step(aes(x=day, y=tmax.data, colour='tmax')) +
+  f = substr(df$tmax.flag, 2, 2) != " "
+  df$ones = rep(1, length(f))
+  df$ones[f] <- 3
+  df$ones <- factor(df$ones)
+  ggplot(df) +
+    geom_step(aes(x=day, y=tmax.data,
+      colour='tmax', linetype=ones)) +
     geom_step(aes(x=day, y=tmin.data, colour='tmin')) +
     labs(title=paste('GHCN-D', sl$uid, isodate), colour='element', y='temperature, ℃')
 }

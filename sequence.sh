@@ -122,7 +122,7 @@ make_station_dmet_png () {
     then
         return
     fi
-    R --slave < figures.R
+    ./figures.R
 }
 
 fetch_ghcnd_gsn

@@ -42,15 +42,17 @@ series is then averaged into a monthly DTR.
 Note that it is easy to use Method M on collections of monthly data
 (such as GHCN-M, USHCN); this makes Method M attractive as
 monthly data is often easier to obtain and may have already been
-through a reasonable quality assurance process.  In contrast 
+through a reasonable quality assurance process.  In contrast,
 Method D requires access to daily data; there is often more
 daily data, but it can be harder to access, there may be
-unreasonable volumes of it, and it may only have had no, or only
+unreasonable volumes of it, and it may have had no, or only
 minimal, quality checks applied.
 
-In an observing network it is desirable to compile monthly
+It is desirable to compile monthly
 averages from a complete set of days.  Inevitably however, there
-may be some days where an element is not reported.  Clearly when
+may be some days where an element is not reported (or, equally,
+where the reported value is erroneous and quality checks have
+eliminated it).  Clearly when
 there are no missing days in a particular month, then Method M
 and Method D will compute the same value for the monthly average
 DTR.  However, if there are days when TMIN is reported but TMAX
@@ -83,6 +85,30 @@ We use daily data from Global Climate Observing System Surface
 Network (GSN) [PETERSONETAL1997] stations that are in GHCN-D
 [MENNEETAL2012].  All data flagged by the GHCN-D automated quality
 assurance procedures [DURREETAL2010] are removed before processing.
+For each day where a station reports TMIN and TMAX they are
+subtracted to give DTR.  For each of the daily series of TMIN,
+TMAX, DTR at each station, when a month has sufficient daily
+values (no more than 5 days missing, and no more than 3
+consecutively: the WMO 3/5 rule [WMOTD341]), then a
+corresponding monthly average is computed by taking the mean of
+the (non-missing) daily values.  Where TMIN, TMAX, DTR all have
+a monthly average then DMET (Difference in METhod) is computed
+as $$ (TMAX - TMIN)/2 - DTR $$.
+
+# Limitations
+
+We have not investigated the extent to which the GHCN-D quality
+checks introduce a bias in DMET.
+
+We have only used one data source, it may be that investigating
+other data sources would lead to different conclusions.
+Although it should be noted that GHCN-D is a compilation of data
+from diverse sources.
+
+We have only investigated a part of the GHCN-D network.
+
+We have not shown that trends of DTR over large areas are
+affected.
 
 ## Paragraphs not yet placed
 
@@ -103,7 +129,7 @@ any month.
 
 Quality.  5 stations in the UK have clear discrepencies in a
 multi-year period in the decade starting in 2001 for the TMIN element.
-The remaining UK station does have a long enough period for this
+The remaining UK station does not have a long enough period for this
 analysis.  Consequently all UK stations in the GSN are discarded from
 this analysis.  Brief visual checks of all the stations (temperatures
 and anomalies for both TMIN and TMAX) were made; no further stations
