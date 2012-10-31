@@ -77,3 +77,7 @@ dev.off()
 png("work/AU000005010201204.png")
 TStep(SingleMonth(GHCNDStationT('AU000005010'), 2012, 4))
 dev.off()
+
+png("work/USW00093820193511.png")
+TStep(SingleMonth(GHCNDStationT('USW00093820'), 1935, 11))
+dev.off()

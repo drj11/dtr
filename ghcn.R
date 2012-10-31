@@ -356,7 +356,7 @@ TStep <- function(sl) {
   df$ones <- factor(df$ones)
   ggplot(df) +
     geom_step(aes(x=day, y=tmax.data,
-      colour='tmax', linetype=ones)) +
+      colour='tmax')) +
     geom_step(aes(x=day, y=tmin.data, colour='tmin')) +
     labs(title=paste('GHCN-D', sl$uid, isodate), colour='element', y='temperature, ℃')
 }
