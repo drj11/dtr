@@ -105,7 +105,7 @@ sync_dsumm () {
     then
         return
     fi
-    ./massdsumm.sh
+    ./dmetsumm.sh
 }
 sync_dmet_txt () {
     if newer work/dmet.txt work/dsumm &&

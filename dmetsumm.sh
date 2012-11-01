@@ -8,6 +8,6 @@ for f in work/dmet/*
 do
     u=$(basename "$f")
     printf '\r%s' $u
-    ./dsumm.py $f > work/dsumm/$u
+    ./msumm.py $f > work/dsumm/$u
 done
 printf '\n'
