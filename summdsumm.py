@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
-"""Summarise the work/dsumm directory."""
+"""Summarise the work/dsumm directory.  Output file are written to
+work/something."""
 
 import json
 import os
 
 # Local
-import ghcnd
+import ghcn
 
 def seqsumm():
     """Yield sequence of summary objects, eliminating those
@@ -48,7 +49,7 @@ def all_summaries(summs):
 
 def summaries_to_file(summs, out):
     """Write out stations summaries to a single file."""
-    meta = ghcnd.GHCNDMeta()
+    meta = ghcn.D.meta()
     annual = json.load(open('work/annual.json'))
     for s in summs:
         uid= s['uid']
@@ -73,7 +74,7 @@ def eurobox_summaries(summs):
         summaries_to_file(stations_in_box(summs, (-15, 15, 38, 70)), f)
 
 def stations_in_box(summs, box):
-    meta = ghcnd.GHCNDMeta()
+    meta = ghcn.D.meta()
     w,e,s,n = box
     for summ in summs:
         m = meta[summ['uid']]

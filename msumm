@@ -1,6 +1,8 @@
 #!/bin/sh
-for a in *.dly
+IFS=''
+for a in data/ghcnd_gsn/*.dly
 do
+    a=$(basename $a)
     a=${a%.dly}
     ./summ.py $a
 done

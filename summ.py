@@ -4,11 +4,11 @@
 
 import sys
 # Local
-import ghcnd
+import ghcn
 
 def summarise(out, uid, element=['TMIN', 'TMAX']):
     sys.stdout.write("%s %r\n" % (uid, element))
-    rec = ghcnd.series(uid, element)
+    rec = ghcn.D.load(uid, element, dir='data/ghcnd_gsn')
     sys.stdout.write("first year: %s\n" % rec.firstyear)
     for elem in element:
         sys.stdout.write("%s\n" % elem)

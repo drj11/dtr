@@ -19,12 +19,14 @@ Many stations show quantisation to degrees Fahrenheit, 0.5 C,
 
 """
 
-import ghcnd
 import math
 import itertools
 
+# Local
+import ghcn
+
 def quant(uid):
-    station = ghcnd.series(uid, element=['TMIN', 'TMAX'], dir='data/ghcnd_gsn', scale=False)
+    station = ghcn.D.load(uid, element=['TMIN', 'TMAX'], dir='data/ghcnd_gsn', scale=False)
     for element,series in station.series.items():
         quant_one_elem(series)
         print uid, element

@@ -1,13 +1,23 @@
 #!/usr/bin/env python
 
-"""Handle data in GHCN-D format.
+"""Handle data in GHCN-Daily and GHCN-Monthly v3 format.
 See ftp://ftp.ncdc.noaa.goc/pub/data/ghcn/daily/readme.txt for
-details of the format (and location of the GHCN-D data).
+details of the GHCN-D format (and location of the GHCN-D data).
+
+ghcn.M.load loads GHCN-M data; ghcn.D.load load GHCN-D data.
 """
 
 import itertools
 import os
 import warnings
+
+class Pack:
+    def __init__(self, **k):
+        self.__dict__.update(k)
+
+class Station:
+    def __init__(self, **k):
+        self.__dict__.update(k)
 
 class Series:
     """When populated, self.data will be a data series for a
@@ -38,10 +48,11 @@ class Series:
         raise Exception("Can't find scale for element %s" % self.element)
 
     def append(self, row):
-        """Append a row of data.  *row* is a dict.  *row['element']*
-        gives the (4 character) element type.  *row['year']* and *row['month']*
-        give the time.  *row['data']* is the data as a flat string (the
-        concatenation of 31 8-character sequences).
+        """Append a row of data.  *row* is a dict.  Magically works out
+        whether the row is one month of daily data or one year of monthly
+        data.  *row['element']* gives the (4 character) element type.  *row['year']*
+        and (optionally) *row['month']* give the time.  *row['data']* is the data as a
+        flat string (the remainder of the line in the file).
         """
 
         if self.element is None:
@@ -142,108 +153,113 @@ def month_length(year, month):
        return 31 - month%2
 
 
-ghcnd_fields = dict(
-    uid=        (0,  11, str),
-    year=       (11, 15, int),
-    month=      (15, 17, int),
-    element=    (17, 21, str),
-    data=       (21, 269, str)
-).items()
-
-ghcnm_fields = dict(
-    uid=        (0,  11, str),
-    year=       (11, 15, int),
-    element=    (15, 19, str),
-    data=       (19, 115, str)
-).items()
-
-def rowtodict(l):
-    return dict((field, convert(l[p:q]))
-      for field,(p,q,convert) in ghcnd_fields)
-
-def mrowtodict(l):
-    return dict((field, convert(l[p:q]))
-      for field,(p,q,convert) in ghcnm_fields)
-
-def series(uid, element=['TMIN'], file=None, dir=None, scale=True):
-    """Load GHCN-D data for station *uid* picking out all
-    elements in the list *element*."""
-
-    if file is None:
-        file = "%s.dly" % uid
-    if dir:
-        file = os.path.join(dir, file)
-
-    f = open(file, 'U')
-    s = Record(uid=uid, element=element, scale=scale)
-    for line in f:
-        row = rowtodict(line)
-        s.append(row)
-    return s
-
-def monthly(f, element=['TMIN', 'TMAX']):
-    """Load GHCN-M V3 data for all stations in file *f*.
-    Each station is yielded."""
-    for uid,rows in itertools.groupby(f, lambda l:l[:11]):
-        s = Record(uid=uid, element=element)
-        for line in rows:
-            row = mrowtodict(line)
-            s.append(row)
-        yield s
-
-class Station:
-    def __init__(self, **k):
-        self.__dict__.update(k)
-
-def GHCNDMeta():
-    """Return a dict of objects, indexed by the (11-character)
-    UID for a station.  The object holds the station
-    metadata."""
-    # See GHCND readme.txt
-
-    ghcnd_meta = dict(
+class _D:
+    """Just a container for Daily package members."""
+    fields = dict(
         uid=        (0,  11, str),
-        latitude=   (12, 20, float),
-        longitude=  (21, 30, float),
-        elevation=  (31, 37, float),
-        state=      (38, 40, str),
-        name=       (41, 71, str),
-        gsnflag=    (72, 75, str),
-        hcnflag=    (76, 79, str),
-        wmoid=      (80, 85, str),
+        year=       (11, 15, int),
+        month=      (15, 17, int),
+        element=    (17, 21, str),
+        data=       (21, 269, str)
     ).items()
 
-    r = {}
-    for row in open("data/ghcnd-stations.txt"):
-        d = {}
-        for field,(p,q,convert) in ghcnd_meta:
-            d[field] = convert(row[p:q])
-        r[d['uid']] = Station(**d)
-    return r
+    def rowtodict(l):
+        return dict((field, convert(l[p:q]))
+          for field,(p,q,convert) in D.fields)
 
-def writeGHCNMV3(out, series):
-    """To the open file *out* write the series object in
-    GHCN-M V3 format."""
+    def load(uid, element=['TMIN'], file=None, dir=None, scale=True):
+        """Load GHCN-D data for station *uid* picking out all
+        elements in the list *element*."""
 
-    assert len(series.uid) == 11
-    # :todo: pick scale according to element.
-    scale = 100
+        if file is None:
+            file = "%s.dly" % uid
+        if dir:
+            file = os.path.join(dir, file)
 
-    missing_year = [None]*12
+        f = open(file, 'U')
+        s = Record(uid=uid, element=element, scale=scale)
+        for line in f:
+            row = D.rowtodict(line)
+            s.append(row)
+        return s
 
-    for m in range(0, len(series.data), 12):
-        y = series.data[m:m+12]
-        # pad to length 12
-        y += missing_year[len(y):]
-        if y == missing_year:
-            # Year with no valid data; do not output.
-            continue
-        y = [x*100 if x is not None else -9999 for x in y]
-        year = series.firstyear + m//12
-        out.write("%11s%04d%-4.4s" % (series.uid, year, series.element))
-        for x in y:
-            out.write("%5.0f   " % x)
-        out.write('\n')
+    def meta():
+        """Return a dict of objects, indexed by the (11-character)
+        UID for a station.  The object holds the station
+        metadata."""
+        # See GHCND readme.txt
+
+        ghcnd_meta = dict(
+            uid=        (0,  11, str),
+            latitude=   (12, 20, float),
+            longitude=  (21, 30, float),
+            elevation=  (31, 37, float),
+            state=      (38, 40, str),
+            name=       (41, 71, str),
+            gsnflag=    (72, 75, str),
+            hcnflag=    (76, 79, str),
+            wmoid=      (80, 85, str),
+        ).items()
+
+        r = {}
+        for row in open("data/ghcnd-stations.txt"):
+            d = {}
+            for field,(p,q,convert) in ghcnd_meta:
+                d[field] = convert(row[p:q])
+            r[d['uid']] = Station(**d)
+        return r
+
+
+D = Pack(**_D.__dict__)
+
+class _M:
+    """Just a container for Monthly package members."""
+    fields = dict(
+        uid=        (0,  11, str),
+        year=       (11, 15, int),
+        element=    (15, 19, str),
+        data=       (19, 115, str)
+    ).items()
+
+    def rowtodict(l):
+        return dict((field, convert(l[p:q]))
+          for field,(p,q,convert) in M.fields)
+
+    def load(f, element=['TMIN', 'TMAX']):
+        """Load GHCN-M V3 data for all stations in file *f*.
+        Each station is yielded."""
+        for uid,rows in itertools.groupby(f, lambda l:l[:11]):
+            s = Record(uid=uid, element=element)
+            for line in rows:
+                row = mrowtodict(line)
+                s.append(row)
+            yield s
+
+    def V3write(out, series):
+        """To the open file *out* write the series object in
+        GHCN-M V3 format."""
+
+        assert len(series.uid) == 11
+        # :todo: pick scale according to element.
+        scale = 100
+
+        missing_year = [None]*12
+
+        for m in range(0, len(series.data), 12):
+            y = series.data[m:m+12]
+            # pad to length 12
+            y += missing_year[len(y):]
+            if y == missing_year:
+                # Year with no valid data; do not output.
+                continue
+            y = [x*scale if x is not None else -9999 for x in y]
+            year = series.firstyear + m//12
+            out.write("%11s%04d%-4.4s" % (series.uid, year, series.element))
+            for x in y:
+                out.write("%5.0f   " % x)
+            out.write('\n')
+
+M = Pack(**_M.__dict__)
 
 
 def main(argv=None):
@@ -251,7 +267,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     arg = argv[1:]
-    series(arg[0])
+    D.load(arg[0], dir='data/ghcnd_gsn')
 
 if __name__ == '__main__':
     main()

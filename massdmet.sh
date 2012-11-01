@@ -8,11 +8,10 @@ mkdir -p work/dmet
 mkdir -p work/mdtr
 for f in data/ghcnd_gsn/*.dly
 do
-    f=$(basename $f)
-    u=${f%.dly}
+    b=$(basename $f)
+    u=${b%.dly}
     printf '\r%s' $u
-    ( cd data/ghcnd_gsn
-    ../../dtr.py $f ) > work/mdtr/$u
+    ./dtr.py $f > work/mdtr/$u
     ./dmet.py < work/mdtr/$u > work/dmet/$u
 done
 printf '\n'

@@ -2,7 +2,7 @@
 
 """Computing DTR - Diurnal Temperature Range.
 
-dtr.py uid
+dtr.py uid|filename
 
 Writes a GHCN V3 style file (containing more than one element) to stdout.
 
@@ -17,20 +17,26 @@ subtracting the two values.
 """
 
 import itertools
+import os
 
 # Local
-import ghcnd
+import ghcn
 
 def two_way_dtr(uid):
     """Load the daly record for station *uid* and return a record object
     with monthly series for MDTR and TEXS (as well as TMIN and TMAX which
     are incidentally required).
     """
+    key = {}
     if uid.endswith('.dly'):
-        uid = uid.replace('.dly', '')
-    rec = ghcnd.series(uid, element=['TMIN', 'TMAX'])
+        key.update(dict(file=uid))
+        uid = os.path.basename(uid.replace('.dly', ''))
+    else:
+        key.update(dict(dir='data/ghcnd_gsn'))
+    key['uid'] = uid
+    rec = ghcn.D.load(element=['TMIN', 'TMAX'], **key)
     m = monthly(dtr(rec))
-    new = ghcnd.Record(uid=rec.uid,
+    new = ghcn.Record(uid=rec.uid,
       element=['TMIN', 'TMAX', 'MDTR', 'TEXS'], firstyear=rec.firstyear)
     new.series['MDTR'] = m
     for elem in ['TMIN', 'TMAX']:
@@ -47,7 +53,7 @@ def texs(rec):
     assert 'TMIN' in rec.series
     assert 'TMAX' in rec.series
 
-    new = ghcnd.Series(uid=rec.uid, element='TEXS', firstyear=rec.firstyear)
+    new = ghcn.Series(uid=rec.uid, element='TEXS', firstyear=rec.firstyear)
     d = []
     for tn,tx in zip(rec.series['TMIN'].data, rec.series['TMAX'].data):
         if None in (tn,tx):
@@ -62,7 +68,7 @@ def dtr(rec):
     series of DTR values, with each month being a sequence
     of daily DTR values.
     """
-    new = ghcnd.Series(uid=rec.uid, element='DTR', firstyear=rec.firstyear)
+    new = ghcn.Series(uid=rec.uid, element='DTR', firstyear=rec.firstyear)
     new.data = [list(single_dtr_month(mn, mx))
       for mn,mx in zip(rec.series['TMIN'].data, rec.series['TMAX'].data)]
     return new
@@ -81,7 +87,7 @@ def monthly(daily):
     new_elem = daily.element
     if new_elem == 'DTR':
         new_elem = 'MDTR'
-    new = ghcnd.Series(uid=daily.uid, element=new_elem, firstyear=daily.firstyear)
+    new = ghcn.Series(uid=daily.uid, element=new_elem, firstyear=daily.firstyear)
 
     new.data = map(single_monthly_average, daily.data)
     return new
@@ -125,10 +131,10 @@ def main(argv=None):
     arg = argv[1:]
 
     rec = two_way_dtr(arg[0])
-    ghcnd.writeGHCNMV3(sys.stdout, rec.series['MDTR'])
-    ghcnd.writeGHCNMV3(sys.stdout, rec.series['TEXS'])
-    ghcnd.writeGHCNMV3(sys.stdout, rec.series['TMIN'])
-    ghcnd.writeGHCNMV3(sys.stdout, rec.series['TMAX'])
+    ghcn.M.V3write(sys.stdout, rec.series['MDTR'])
+    ghcn.M.V3write(sys.stdout, rec.series['TEXS'])
+    ghcn.M.V3write(sys.stdout, rec.series['TMIN'])
+    ghcn.M.V3write(sys.stdout, rec.series['TMAX'])
 
 if __name__ == '__main__':
     main()

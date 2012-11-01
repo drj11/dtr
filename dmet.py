@@ -14,7 +14,7 @@ was missing.
 import itertools
 
 # Local
-import ghcnd
+import ghcn
 
 def keep(inp, elems):
     """Retain only (GHCN-M V3) rows with an element in
@@ -29,7 +29,7 @@ def diff(inp, out):
         b = list(block)
         l = ''
         if len(b) == 1:
-            row = ghcnd.mrowtodict(b[0])
+            row = ghcn.M.rowtodict(b[0])
             assert row['element'] == 'TEXS'
             for i in range(0,96,8):
                 d = row['data'][i:i+5]
@@ -39,7 +39,7 @@ def diff(inp, out):
                     l += ' 8888   '
         else:
             assert len(b) == 2
-            row = map(ghcnd.mrowtodict, b)
+            row = map(ghcn.M.rowtodict, b)
             row = dict((r['element'], r) for r in row)
             texs = row['TEXS']['data']
             mdtr = row['MDTR']['data']
