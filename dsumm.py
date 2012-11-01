@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 
-"""Summarise DMET files."""
+"""Summarise DMET files.  A JSON file is output, summarising the monthly
+values in the GHCN-M v3 input file."""
 
 def GHCNMSeries(f):
+    """Given a file *f* in GHCN-M v3 format, a dict is returned with various
+    summary statistics of the monthly values in the file.
+    """
+
     from ghcnd import mrowtodict
 
     # Count of 8888 entries, that is where values appear in

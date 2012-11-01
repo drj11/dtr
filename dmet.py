@@ -41,10 +41,10 @@ def diff(inp, out):
             assert len(b) == 2
             row = map(ghcnd.mrowtodict, b)
             row = dict((r['element'], r) for r in row)
-            tmmm = row['TEXS']['data']
+            texs = row['TEXS']['data']
             mdtr = row['MDTR']['data']
             for i in range(0,96,8):
-                d = tmmm[i:i+5]
+                d = texs[i:i+5]
                 e = mdtr[i:i+5]
                 if (d,e) == ('-9999','-9999'):
                     l += '-9999   '
