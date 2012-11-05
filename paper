@@ -29,7 +29,7 @@ made available in compilations of monthly climate data.  However,
 DTR is usually not (for example, it is not published in GHCN-M or
 USHCN [MENNEETAL2009]).
 
-Consider two methods for copmuting a monthly average for DTR:
+Consider two methods for computing a monthly average for DTR:
 
 Method M.  Daily maximum temperature is averaged into a monthly TMAX;
 daily minimum temperature is averaged into a monthly TMIN.  Monthly DTR
@@ -95,6 +95,16 @@ the (non-missing) daily values.  Where TMIN, TMAX, DTR all have
 a monthly average then DMET (Difference in METhod) is computed
 as $$ (TMAX - TMIN)/2 - DTR $$.
 
+In addition to the quality checks that are incorporated in the
+GHCN-D data, we performed a brief visual check of all stations
+(temperatures and anomalies for both TMIN and TMAX).  As a result,
+all UK GSN stations are discarded from this analysis: 5 stations
+have clear discrepencies in a multi-year period in the decade
+starting in 2001 for the TMIN element; the remaining UK station
+does not have a long enough period for this analysis.
+
+# Results
+
 # Limitations
 
 We have not investigated the extent to which the GHCN-D quality
@@ -126,14 +136,6 @@ days or 5 or more missing consecutively (section 4.8.4 of [WMO100]).
 For 30-year normals the stricter 3/5 rule is recommended [WMOTD341]:
 no more than 5 missing days and no more than 3 missing consecutively in
 any month.
-
-Quality.  5 stations in the UK have clear discrepencies in a
-multi-year period in the decade starting in 2001 for the TMIN element.
-The remaining UK station does not have a long enough period for this
-analysis.  Consequently all UK stations in the GSN are discarded from
-this analysis.  Brief visual checks of all the stations (temperatures
-and anomalies for both TMIN and TMAX) were made; no further stations
-were discarded.
 
 While more workers may be choosing to do analyses with daily
 data series, it is still the case that due to their simplicitly,
