@@ -350,14 +350,29 @@ TStep <- function(sl) {
   # maxpoints = (!is.na(df$tmax)) & is.na(df$tmin)
   # maxpoints[maxpoints == 0] <- NA
   isodate <- sprintf('%04d-%02d-%02d', sl$first[1], sl$first[2], sl$first[3])
-  f = substr(df$tmax.flag, 2, 2) != " "
-  df$ones = rep(1, length(f))
-  df$ones[f] <- 3
-  df$ones <- factor(df$ones)
+
+  # Derive series with only flagged data.
+  tmax.flag <- substr(df$tmax.flag, 2, 2) != " "
+  tmax.flagged <- df$tmax.data[]
+  tmax.flagged[!tmax.flag] <- NA
+  tmin.flag <- substr(df$tmin.flag, 2, 2) != " "
+  tmin.flagged <- df$tmin.data[]
+  tmin.flagged[!tmin.flag] <- NA
+
+  # Derive series with only unflagged data.
+  tmax.qad <- df$tmax.data[]
+  tmax.qad[tmax.flag] <- NA
+  tmin.qad <- df$tmin.data[]
+  tmin.qad[tmin.flag] <- NA
+
+  df <- data.frame(df, tmax.flagged=tmax.flagged, tmin.flagged=tmin.flagged,
+    tmax.qad=tmax.qad, tmin.qad=tmin.qad)
+  # Doesn't seem to be dotted.  Don't know why.
   ggplot(df) +
-    geom_step(aes(x=day, y=tmax.data,
-      colour='tmax')) +
-    geom_step(aes(x=day, y=tmin.data, colour='tmin')) +
+    geom_step(aes(x=day, y=tmax.qad, colour='tmax')) +
+    geom_step(aes(x=day, y=tmax.flagged, colour='tmax', linestyle='dotted')) +
+    geom_step(aes(x=day, y=tmin.qad, colour='tmin')) +
+    geom_step(aes(x=day, y=tmin.flagged, colour='tmin', linestyle='dotted')) +
     labs(title=paste('GHCN-D', sl$uid, isodate), colour='element', y='temperature, ℃')
 }
 
