@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-"""Summarise the work/dsumm directory.  Output file are written to
-work/something."""
+"""Summarise the work/dsumm directory.  Output files are written to
+work/dmet.txt work/euro.txt.  The work/annual.json is used as input."""
 
 import json
 import os
