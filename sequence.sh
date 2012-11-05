@@ -118,11 +118,11 @@ sync_dmet_txt () {
 }
 make_station_dmet_png () {
     if newer work/station-dmet.png work/dmet.txt &&
-      newer work/station-dmet.png figures.R
+      newer work/station-dmet.png fig-mass.R
     then
         return
     fi
-    ./figures.R
+    ./fig-mass.R
 }
 
 fetch_ghcnd_gsn
