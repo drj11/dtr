@@ -103,7 +103,14 @@ have clear discrepencies in a multi-year period in the decade
 starting in 2001 for the TMIN element; the remaining UK station
 does not have a long enough period for this analysis.
 
+No attempt has been made to correct for any inhomogeneity.
+
 # Results
+
+Figure [XX work/station-dmet.png] shows the distribution of the
+average monthly value for DMET across all stations in the analysis.
+Clear most stations have a an average DMET close to zero, but there
+is a small positive skew.  The distribution is not normal (XX).
 
 # Limitations
 
