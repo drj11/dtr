@@ -1,5 +1,7 @@
 #!/usr/bin/env Rscript
 
+require('ggplot2')
+
 # Mostly just examples.
 myRange <- function(a){
   # A range where the beginning and end
@@ -19,7 +21,7 @@ r=myRange(t$mean)
 # tmin=t[,8]
 # tmax=t[,9]
 png("work/station-dmet.png")
-hist(t$mean, breaks=seq(r[1], r[2]),
+ggplot(t) + geom_histogram(aes(x=mean), breaks=seq(r[1], r[2]),
   main="Station Average Monthly DMET",
   ylab="Station Count",
   xlab=expression("Average Monthly DMET ×10"^{-2}*"K"))
