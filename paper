@@ -3,9 +3,9 @@
 # Abstract
 
 We find that in many published studies
-the methods used to calculate diurnal temperature range (DTR)
-are not always specified (in particular
-for monthly averages of DTR), or are specified only implicitly.
+the methods used to calculate mothly averages of 
+diurnal temperature range (DTR)
+are not always specified, or are specified only implicitly.
 In light of this, we study the differences that arise between two
 reasonable choices of method.  In this study, the methods lead to
 values for monthly average DTR that may differ by more than 2 K.
@@ -50,7 +50,7 @@ minimal, quality checks applied.
 
 It is desirable to compile monthly
 averages from a complete set of days.  Inevitably however, there
-may be some days where an element is not reported (or, equally,
+may be some days where an element is not reported (or
 where the reported value is erroneous and quality checks have
 eliminated it).  Clearly when
 there are no missing days in a particular month, then Method M
