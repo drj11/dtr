@@ -81,7 +81,7 @@ make_dmet () {
     then
         return
     fi
-    ./massdmet.sh
+    code/massdmet.sh
 }
 concat_dmet () {
     f=$(ls -t work/dmet)
@@ -93,11 +93,11 @@ concat_dmet () {
 }
 make_annual () {
     if newer work/annual.json work/mdtr &&
-      newer work/annual.json anntem.py
+      newer work/annual.json code/anntem.py
     then
         return
     fi
-    ./anntem.py work/mdtr > work/annual.json
+    code/anntem.py work/mdtr > work/annual.json
 }
 sync_dsumm () {
     # The work/dsumm directory is derived from the work/dmet directory.
@@ -105,24 +105,24 @@ sync_dsumm () {
     then
         return
     fi
-    ./dmetsumm.sh
+    code/dmetsumm.sh
 }
 sync_dmet_txt () {
     if newer work/dmet.txt work/dsumm &&
-      newer work/dmet.txt summdsumm.py &&
+      newer work/dmet.txt code/summdsumm.py &&
       newer work/dmet.txt work/annual.json
     then
         return
     fi
-    ./summdsumm.py
+    code/summdsumm.py
 }
 make_station_dmet_png () {
     if newer work/station-dmet.png work/dmet.txt &&
-      newer work/station-dmet.png fig-mass.R
+      newer work/station-dmet.png code/fig-mass.R
     then
         return
     fi
-    ./fig-mass.R
+    code/fig-mass.R
 }
 
 fetch_ghcnd_gsn
