@@ -59,15 +59,16 @@ DTR.  However, if there are days when TMIN is reported but TMAX
 is not (or vice versa) then the two methods may compute
 different values.
 
-To illustrate the effect, see figure [XX work/b19401.png], a plot
+To illustrate the effect, see figure [XX work/USW00026615194901.png],
+a plot
 of TMAX and TMIN for GHCN-D station USW00026615 year 1949, month
-January (after flagged data have been removed).  Circles mark days
-where TMAX is valid and TMIN is not valid (4 days), and days where
-TMIN is valid and TMAX is not valid (3 days).  For each series the
-missing days are isolated, so would still pass the WMO 3/5 rule.
-It so happens that in this month the days when TMIN is valid but
-TMAX is not are cold, and the days when TMAX is valid but TMIN is
-not are warm.  The difference in the result of the two different
+January. Data flagged by the QA process have been plotted with a
+dotted line. Note several days where TMAX is valid and TMIN is
+not, and also days where TMIN is valid and TMAX is not.
+For each series the missing days are isolated, so would still pass the
+WMO 3/5 rule.  It so happens that in this month the days when TMIN is
+valid but TMAX is not are cold, and the days when TMAX is valid but
+TMIN is not are warm.  The difference in the result of the two different
 methods for calculating DTR is 2.4 ℃.
 
 In practice we find studies use monthly data when assessing DTR:
