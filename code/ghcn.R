@@ -367,12 +367,12 @@ TStep <- function(sl) {
 
   df <- data.frame(df, tmax.flagged=tmax.flagged, tmin.flagged=tmin.flagged,
     tmax.qad=tmax.qad, tmin.qad=tmin.qad)
-  # Doesn't seem to be dotted.  Don't know why.
+  dotted <- "22"
   ggplot(df) +
     geom_step(aes(x=day, y=tmax.qad, colour='tmax')) +
-    geom_step(aes(x=day, y=tmax.flagged, colour='tmax', linestyle='dotted')) +
+    geom_step(aes(x=day, y=tmax.flagged, colour='tmax'), linetype=dotted) +
     geom_step(aes(x=day, y=tmin.qad, colour='tmin')) +
-    geom_step(aes(x=day, y=tmin.flagged, colour='tmin', linestyle='dotted')) +
+    geom_step(aes(x=day, y=tmin.flagged, colour='tmin'), linetype=dotted) +
     labs(title=paste('GHCN-D', sl$uid, isodate), colour='element', y='temperature, ℃')
 }
 
