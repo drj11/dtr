@@ -1,7 +1,7 @@
-
+#!/usr/bin/env Rscript
 png("work/b194901.png")
 # Plot TMIN and TMAX for station USW00026615 1949-01
-source('ghcn.R')
+source('code/ghcn.R')
 PlotSingleMonth('USW00026615', 1949, 1)
 dev.off()
 
