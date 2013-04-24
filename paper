@@ -18,7 +18,7 @@ is due to choice of method.
 # Intro
 
 Daily Temperature Range (DTR) is the range over which temperature
-varies during a day.  It is usually defined as $$ TMIN - TMAX $$
+varies during a day.  It is usually defined as $$ TMAX - TMIN $$
 where TMIN is the minimum temperature in a day, and TMAX is the
 maximum temperature in a day.  In this study we are only concerned
 with measurements of land surface air temperatures.
